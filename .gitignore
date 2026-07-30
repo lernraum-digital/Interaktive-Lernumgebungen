@@ -1,1 +1,7 @@
 .DS_Store
+
+# Lokale Quellen des EF-Verbentrainers – nicht veröffentlichen.
+spanisch/ef/Verbentrainer Material/
+
+# Versehentlich im Projektstamm abgelegtes Arbeits-Screenshot.
+/Bildschirmfoto 2026-07-30 um 11.44.21.png

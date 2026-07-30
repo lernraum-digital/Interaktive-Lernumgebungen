@@ -1,0 +1,34 @@
+(function(){
+  "use strict";
+  const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const KEY="vamos-teacher-draft-v1",D=window.VERB_DATA,C=window.TEACHER_CONFIG,DEFAULTS=window.TEACHER_DEFAULTS;
+  const MODE_LABELS={write:"Verbform schreiben",choice:"Verbform auswählen",person:"Person erkennen",infinitive:"Infinitiv erkennen",sentence:"Belegte Lückensätze",mixed:"Gemischtes Training"};
+  let draft=readCurrent();
+  function readCurrent(){try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved?.verbs?.length)return saved;}catch(_){}return{version:1,currentStage:C.currentStage,roundLength:C.roundLength,distribution:{...C.distribution},repetition:{...C.repetition},enabledTaskTypes:[...C.enabledTaskTypes],verbs:D.verbs.map(v=>({id:v.id,sequence:v.sequence,stage:v.stage,active:v.active}))};}
+  function init(){populateStatic();render();bind();updateMix();}
+  function populateStatic(){$("#current-stage").innerHTML=C.stages.map(s=>`<option value="${s.id}">Stufe ${s.id} · ${s.title}</option>`).join("");$("#mode-options").innerHTML=Object.entries(MODE_LABELS).map(([id,label])=>`<label><input type="checkbox" value="${id}"><span>${label}</span></label>`).join("");}
+  function render(){
+    $("#current-stage").value=draft.currentStage;$("#round-length").value=draft.roundLength;$("#minimum-older").value=draft.repetition.minimumOlderItemsPerRound;$("#maximum-same").value=draft.repetition.maximumSameVerbPerRound;
+    $("#newest-share").value=Math.round(draft.distribution.newestStage*100);$("#older-share").value=Math.round(draft.distribution.olderStages*100);$("#adaptive-share").value=Math.round(draft.distribution.adaptiveReview*100);
+    $$("#mode-options input").forEach(x=>x.checked=draft.enabledTaskTypes.includes(x.value));renderVerbs();updateMix();
+  }
+  function renderVerbs(){const byId=new Map(D.verbs.map(v=>[v.id,v]));draft.verbs.sort((a,b)=>a.sequence-b.sequence);$("#verb-list").innerHTML=draft.verbs.map((item,index)=>{const verb=byId.get(item.id),released=item.active&&item.stage<=draft.currentStage;return`<article class="verb-row ${released?"is-released":"is-locked"}" data-id="${item.id}"><div class="order-buttons"><button type="button" data-move="up" aria-label="${verb.infinitive} nach oben" ${index===0?"disabled":""}>↑</button><button type="button" data-move="down" aria-label="${verb.infinitive} nach unten" ${index===draft.verbs.length-1?"disabled":""}>↓</button></div><div class="verb-name"><strong>${verb.infinitive}</strong><small>${verb.meaning}</small></div><label class="toggle"><input type="checkbox" data-active ${item.active?"checked":""}> aktiv</label><select data-stage aria-label="Stufe für ${verb.infinitive}">${C.stages.map(s=>`<option value="${s.id}" ${s.id===item.stage?"selected":""}>Stufe ${s.id}</option>`).join("")}</select><span class="sequence">Position ${index+1}</span></article>`;}).join("");bindVerbRows();}
+  function bind(){
+    $("#current-stage").addEventListener("change",e=>{draft.currentStage=Number(e.target.value);saveAndRender();});$("#round-length").addEventListener("change",e=>{draft.roundLength=Number(e.target.value);save();});$("#minimum-older").addEventListener("change",e=>{draft.repetition.minimumOlderItemsPerRound=Number(e.target.value);save();});$("#maximum-same").addEventListener("change",e=>{draft.repetition.maximumSameVerbPerRound=Number(e.target.value);save();});
+    [["newest-share","newestStage"],["older-share","olderStages"],["adaptive-share","adaptiveReview"]].forEach(([id,key])=>$("#"+id).addEventListener("input",e=>{draft.distribution[key]=Number(e.target.value)/100;updateMix();save(false);}));
+    $$("#mode-options input").forEach(x=>x.addEventListener("change",()=>{draft.enabledTaskTypes=$$("#mode-options input:checked").map(i=>i.value);save();}));
+    $("#download-js").addEventListener("click",downloadJs);$("#download-json").addEventListener("click",()=>download(JSON.stringify(draft,null,2),"vamos-lehrkraft-entwurf.json","application/json"));$("#import-json").addEventListener("change",importJson);$("#reset-draft").addEventListener("click",resetDraft);
+  }
+  function bindVerbRows(){$$(".verb-row").forEach(row=>{const id=row.dataset.id;$$('button[data-move]',row).forEach(b=>b.addEventListener("click",()=>move(id,b.dataset.move)));$("[data-active]",row).addEventListener("change",e=>{find(id).active=e.target.checked;saveAndRender();});$("[data-stage]",row).addEventListener("change",e=>{find(id).stage=Number(e.target.value);saveAndRender();});});}
+  function find(id){return draft.verbs.find(v=>v.id===id);}
+  function move(id,direction){const index=draft.verbs.findIndex(v=>v.id===id),target=direction==="up"?index-1:index+1;if(target<0||target>=draft.verbs.length)return;[draft.verbs[index],draft.verbs[target]]=[draft.verbs[target],draft.verbs[index]];draft.verbs.forEach((v,i)=>v.sequence=i+1);saveAndRender();}
+  function updateMix(){const newest=Math.round(draft.distribution.newestStage*100),older=Math.round(draft.distribution.olderStages*100),adaptive=Math.round(draft.distribution.adaptiveReview*100),total=newest+older+adaptive;$("#newest-output").textContent=newest+" %";$("#older-output").textContent=older+" %";$("#adaptive-output").textContent=adaptive+" %";$("#mix-total").textContent=`Summe: ${total} %`;$("#mix-total").className=`mix-total ${total===100?"valid":"invalid"}`;$("#download-js").disabled=total!==100;}
+  function save(show=true){localStorage.setItem(KEY,JSON.stringify(draft));if(show){$("#save-status").textContent="Entwurf gespeichert";setTimeout(()=>$("#save-status").textContent="Gilt für die Vorschau",1000);}}
+  function saveAndRender(){save();renderVerbs();}
+  function downloadJs(){save();const content=`(function () {\n  "use strict";\n  window.PUBLISHED_TEACHER_OVERRIDE = ${JSON.stringify(draft,null,2)};\n})();\n`;download(content,"teacher-settings.js","text/javascript");}
+  function download(content,name,type){const blob=new Blob([content],{type}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
+  async function importJson(event){const file=event.target.files?.[0];if(!file)return;try{const parsed=JSON.parse(await file.text());validate(parsed);draft=parsed;save();render();}catch(error){alert("Die Datei konnte nicht als gültiger Lehrkraftentwurf gelesen werden.");}event.target.value="";}
+  function validate(value){if(!value||!Array.isArray(value.verbs)||!Number.isInteger(value.currentStage)||!value.distribution)throw new Error("ungültig");const ids=new Set(D.verbs.map(v=>v.id));if(value.verbs.some(v=>!ids.has(v.id)))throw new Error("unbekanntes Verb");}
+  function resetDraft(){if(!confirm("Den lokalen Lehrkraftentwurf wirklich auf die Projektstandards zurücksetzen?"))return;localStorage.removeItem(KEY);location.reload();}
+  init();
+})();

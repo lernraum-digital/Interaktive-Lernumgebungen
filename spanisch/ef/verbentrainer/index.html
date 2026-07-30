@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#183d57">
+  <meta name="description" content="Kumulativer Spanisch-Verbentrainer für die EF – neue Formen lernen, bekannte Verben dauerhaft wiederholen.">
+  <title>¡Vamos! Verb für Verb – Spanisch EF</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Training</a>
+  <header class="app-header">
+    <a class="brand" href="./" aria-label="¡Vamos! Verb für Verb – Start">
+      <span class="brand-mark" aria-hidden="true">V</span>
+      <span><strong>¡Vamos! Verb für Verb</strong><small>Dein Spanisch-Training für die EF</small></span>
+    </a>
+    <div class="header-tools"><span class="xp-chip"><b id="header-xp">0</b> XP</span><button id="settings-button" class="icon-button" type="button" aria-label="Einstellungen öffnen">⚙</button></div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section id="home-view" class="view">
+      <section class="hero" aria-labelledby="hero-title">
+        <img src="assets/images/akademie-hero.webp" alt="Sonniger Innenhof einer magischen Sprachakademie mit einem goldenen Kolibri und einem offenen Buch" width="1728" height="1000">
+        <div class="hero-copy">
+          <p class="eyebrow">Willkommen in der Verb-Akademie</p>
+          <h1 id="hero-title">¡Vamos!<br><span>Verb für Verb.</span></h1>
+          <p>Neue Formen entdecken, Bekanntes wiederholen und Schritt für Schritt sicherer werden.</p>
+          <button id="quick-start" class="button button-primary" type="button">Training starten <span aria-hidden="true">→</span></button>
+          <div class="mix-note"><span aria-hidden="true">✦</span><span><strong>Deine Runde mischt</strong> neue Verben, bekannte Verben und persönliche Wiederholungen.</span></div>
+        </div>
+      </section>
+
+      <section class="academy-section" aria-labelledby="academy-heading">
+        <div class="section-heading"><div><p class="eyebrow">Dein Weg</p><h2 id="academy-heading">Die Verb-Akademie</h2></div><span id="stage-status" class="status-chip"></span></div>
+        <div id="stage-list" class="stage-list"></div>
+      </section>
+
+      <section class="progress-section" aria-labelledby="progress-heading">
+        <div class="section-heading"><div><p class="eyebrow">Dein Lernstand</p><h2 id="progress-heading">Was jetzt zählt</h2></div><button id="free-training" class="button button-secondary" type="button">Freies Training</button></div>
+        <div class="stat-grid">
+          <article><span>✦</span><strong id="xp-value">0 XP</strong><small>gesammelt</small></article>
+          <article><span>◎</span><strong id="accuracy-value">–</strong><small>Trefferquote</small></article>
+          <article><span>⌁</span><strong id="best-value">0</strong><small>beste Serie</small></article>
+          <article><span>◇</span><strong id="mastered-value">0</strong><small>gemeistert</small></article>
+        </div>
+        <div class="focus-grid">
+          <article class="focus-card new"><div class="focus-icon">✦</div><div><p>Neu eingeführt</p><div id="new-verbs" class="verb-chips"></div></div></article>
+          <article class="focus-card known"><div class="focus-icon">↻</div><div><p>Bekannt & wiederholt</p><div id="known-verbs" class="verb-chips"></div></div></article>
+          <article class="focus-card due"><div class="focus-icon">◷</div><div><p>Persönlicher Fokus</p><div id="focus-verbs" class="verb-chips"></div></div></article>
+        </div>
+        <div class="mastery-panel"><div><h3>Meisterschaft</h3><p>Sie wächst durch richtige Antworten, Wiederholungen und stabile Serien.</p></div><div id="mastery-list" class="mastery-list"></div></div>
+        <div id="badge-list" class="badge-list" aria-label="Abzeichen"></div>
+      </section>
+
+      <section class="mode-section" aria-labelledby="mode-heading"><p class="eyebrow">Trainingsarten</p><h2 id="mode-heading">Wähle deinen Fokus</h2><div id="mode-grid" class="mode-grid"></div></section>
+    </section>
+
+    <section id="training-view" class="view training-view" hidden aria-labelledby="question-title">
+      <div class="training-topbar"><button id="leave-training" class="button button-quiet" type="button">Beenden</button><div class="round-progress"><div><span id="round-label">Aufgabe 1</span><span id="round-xp">0 XP</span></div><div class="progress-track"><span id="progress-bar"></span></div></div></div>
+      <article class="question-card">
+        <div class="question-meta"><span id="question-category" class="pill"></span><span id="question-mode" class="pill pill-soft"></span><span id="question-group" class="pill pill-muted"></span></div>
+        <p id="question-instruction" class="instruction"></p><h1 id="question-title"></h1><p id="question-context" class="question-context"></p>
+        <div id="answer-area" class="answer-area"></div><div id="special-characters" class="special-characters" aria-label="Spanische Sonderzeichen" hidden></div>
+        <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+        <div class="question-actions"><button id="check-answer" class="button button-primary" type="button">Prüfen</button><button id="next-question" class="button button-primary" type="button" hidden>Weiter</button></div>
+      </article>
+    </section>
+
+    <section id="result-view" class="view result-view" hidden aria-labelledby="result-heading">
+      <article class="result-card"><img src="assets/images/eingangshalle.webp" alt="Goldener Kolibri über einem offenen Buch in der Eingangshalle der Akademie" width="1100" height="700"><div class="result-copy"><p class="eyebrow">Runde abgeschlossen</p><h1 id="result-heading">Gut trainiert!</h1><p id="result-summary"></p><div id="result-stats" class="result-stats"></div><div id="result-mix" class="result-mix"></div><div id="result-focus" class="result-focus"></div><div class="result-actions"><button id="repeat-round" class="button button-primary" type="button">Noch eine Runde</button><button id="back-home" class="button button-secondary" type="button">Zur Übersicht</button></div></div></article>
+    </section>
+  </main>
+
+  <dialog id="training-dialog"><form id="training-form" method="dialog" class="dialog-card"><div class="dialog-heading"><div><p class="eyebrow">Freies Training</p><h2>Freigegebene Inhalte</h2></div><button class="icon-button close-dialog" type="button" aria-label="Schließen">×</button></div><p class="privacy-note">Hier erscheinen nur Verben, die deine Lehrkraft bereits freigegeben hat.</p><label for="mode-select">Trainingsart</label><select id="mode-select"></select><fieldset><legend>Lektionen</legend><div id="lesson-options" class="check-grid"></div></fieldset><fieldset><legend>Verbgruppen</legend><div id="group-options" class="check-grid"></div></fieldset><label for="round-length">Aufgaben pro Runde</label><select id="round-length"><option>5</option><option>8</option><option>10</option><option>15</option><option>20</option></select><p id="training-error" class="form-error" aria-live="polite"></p><button class="button button-primary" value="start">Training starten</button></form></dialog>
+  <dialog id="settings-dialog"><div class="dialog-card"><div class="dialog-heading"><div><p class="eyebrow">Nur auf diesem Gerät</p><h2>Einstellungen & Daten</h2></div><button class="icon-button close-dialog" type="button" aria-label="Schließen">×</button></div><label for="learner-name">Name oder Kürzel (optional)</label><input id="learner-name" maxlength="30" autocomplete="off"><p class="privacy-note">Der Lernstand bleibt ausschließlich in diesem Browser. Der Export enthält nur den freiwillig eingegebenen Namen oder das Kürzel.</p><div class="settings-actions"><button id="save-name" class="button button-secondary" type="button">Name speichern</button><button id="export-data" class="button button-secondary" type="button">Auswertung exportieren</button><button id="reset-progress" class="button button-danger" type="button">Lernstand zurücksetzen</button></div></div></dialog>
+
+  <script src="data/verbs.js"></script><script src="teacher-settings.js"></script><script src="config.js"></script><script src="storage.js"></script><script src="planner.js"></script><script src="app.js"></script>
+</body>
+</html>
