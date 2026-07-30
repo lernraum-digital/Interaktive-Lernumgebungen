@@ -2,7 +2,7 @@
 
 Stand: 30. Juli 2026
 
-Diese Übersicht trennt die belegte Wortschatzbasis von der Anwendung. Die Originalmaterialien in `../Verbentrainer Material/` wurden nicht verändert.
+Diese Übersicht trennt die belegte Wortschatzbasis von der Anwendung. Die ausgewerteten Originalmaterialien lagen während der Analyse lokal in `../Verbentrainer Material/`, wurden nicht verändert und werden nicht über GitHub Pages veröffentlicht.
 
 ## Ausgewertete Quellen
 
@@ -46,6 +46,8 @@ Lückensätze werden nur aus einzeln hinterlegten Quellsätzen erzeugt. Jeder ne
 
 ## Überarbeitung zur kumulativen Lernfolge
 
-Die 2026 überarbeitete Fassung trennt die vollständige materialbelegte Datenbasis von der unterrichtlichen Freigabe. `sequence` und `stage` werden aus einer zentralen Lehrkraftfolge abgeleitet. Die erste Freigabe umfasst nur `ser`, `estar`, `hablar` und `trabajar`. `escuchar` wurde ergänzt, weil es in `Vocabulario básico.pdf` und der Lehrwerksliste belegt ist; es bleibt bis Stufe 3 gesperrt.
+Die 2026 überarbeitete Fassung trennt die vollständige materialbelegte Datenbasis von der unterrichtlichen Freigabe. `sequence` und `stage` werden aus einer zentralen Lehrkraftfolge abgeleitet. Stufe 1 umfasst `ser`, `estar`, `hablar` und `terminar`; Stufe 2 ergänzt `trabajar` und `charlar`. `escuchar` wurde aufgenommen, weil es in `Vocabulario básico.pdf` und der Lehrwerksliste belegt ist; es bleibt bis Stufe 3 gesperrt.
+
+Zusätzliche Verben können durch die Lehrkraft als aktueller Unterrichtswortschatz eingetragen werden. Dabei sind Bedeutung, alle sechs Präsensformen und ein Quellenhinweis Pflicht. Solche Einträge werden als eigene Lehrkrafteinträge gekennzeichnet und erhalten ohne vollständigen Satzbeleg keine Lückensatzaufgabe.
 
 Gesperrte Datensätze bleiben für spätere Unterrichtsphasen erhalten, werden jedoch nicht für Aufgaben, Ablenkungen, freie Filter oder Lernstatistiken verwendet. Satzbelege und die zuvor dokumentierten unklaren Stellen bleiben unverändert.

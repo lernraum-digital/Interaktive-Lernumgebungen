@@ -10,5 +10,10 @@ Gemeinsame Gestaltungsrichtung: hochwertige zeitgenössische Digitalillustration
 - `eingangshalle.webp`: erste Grundformen und offene Akademiebereiche
 - `galerie-verwandlungen.webp`: visuelle Teilung und Zusammenführung als Bildidee für Stammwechsel
 - `kammer-sonderformen.webp`: besonderes geometrisches Lichtobjekt für unregelmäßige Formen
+- `abzeichen-erste-formen.webp`: offenes Buch mit aufsteigenden goldenen Formsymbolen
+- `abzeichen-neue-sprachkraft.webp`: neu aktivierter türkiser Sprachkristall
+- `abzeichen-nicht-vergessen.webp`: Sanduhr mit goldenem Erinnerungsband
+- `abzeichen-fundament.webp`: vier Steinblöcke als stabiles Lernfundament
+- `training-kolibri.webp`: Kolibri-Leitfigur neben einem offenen Übungsbuch in einer hellen Akademienische
 
-Die Bilder dienen ausschließlich als motivierender Rahmen. Aufgaben, Regeln, Freigaben und Fortschritt werden als zugänglicher HTML-Text dargestellt.
+Die fünf ergänzten Motive wurden am 30. Juli 2026 mit dem integrierten Bildgenerierungswerkzeug einzeln erzeugt, anschließend auf Webgröße verkleinert und mit Qualitätsstufe 80 als WebP gespeichert. Die Bilder dienen ausschließlich als motivierender Rahmen. Aufgaben, Regeln, Abzeichenbedingungen, Freigaben und Fortschritt werden als zugänglicher HTML-Text dargestellt.

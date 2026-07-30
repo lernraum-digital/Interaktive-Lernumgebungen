@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#183d57">
   <meta name="description" content="Kumulativer Spanisch-Verbentrainer für die EF – neue Formen lernen, bekannte Verben dauerhaft wiederholen.">
   <title>¡Vamos! Verb für Verb – Spanisch EF</title>
+  <link rel="icon" href="assets/images/abzeichen-neue-sprachkraft.webp" type="image/webp">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -33,6 +34,7 @@
 
       <section class="academy-section" aria-labelledby="academy-heading">
         <div class="section-heading"><div><p class="eyebrow">Dein Weg</p><h2 id="academy-heading">Die Verb-Akademie</h2></div><span id="stage-status" class="status-chip"></span></div>
+        <p class="section-note">Wähle eine freigegebene Stufe für ein gezieltes Training oder starte oben eine kumulative Runde mit allem, was du bereits kennst.</p>
         <div id="stage-list" class="stage-list"></div>
       </section>
 
@@ -50,7 +52,8 @@
           <article class="focus-card due"><div class="focus-icon">◷</div><div><p>Persönlicher Fokus</p><div id="focus-verbs" class="verb-chips"></div></div></article>
         </div>
         <div class="mastery-panel"><div><h3>Meisterschaft</h3><p>Sie wächst durch richtige Antworten, Wiederholungen und stabile Serien.</p></div><div id="mastery-list" class="mastery-list"></div></div>
-        <div id="badge-list" class="badge-list" aria-label="Abzeichen"></div>
+        <div class="badge-heading"><div><p class="eyebrow">Deine Erfolge</p><h3>Abzeichen der Akademie</h3></div><p>Jedes Abzeichen zeigt, welche Lernleistung du bereits erreicht hast.</p></div>
+        <div id="badge-list" class="badge-list" aria-label="Abzeichen der Akademie"></div>
       </section>
 
       <section class="mode-section" aria-labelledby="mode-heading"><p class="eyebrow">Trainingsarten</p><h2 id="mode-heading">Wähle deinen Fokus</h2><div id="mode-grid" class="mode-grid"></div></section>
@@ -59,11 +62,13 @@
     <section id="training-view" class="view training-view" hidden aria-labelledby="question-title">
       <div class="training-topbar"><button id="leave-training" class="button button-quiet" type="button">Beenden</button><div class="round-progress"><div><span id="round-label">Aufgabe 1</span><span id="round-xp">0 XP</span></div><div class="progress-track"><span id="progress-bar"></span></div></div></div>
       <article class="question-card">
-        <div class="question-meta"><span id="question-category" class="pill"></span><span id="question-mode" class="pill pill-soft"></span><span id="question-group" class="pill pill-muted"></span></div>
-        <p id="question-instruction" class="instruction"></p><h1 id="question-title"></h1><p id="question-context" class="question-context"></p>
-        <div id="answer-area" class="answer-area"></div><div id="special-characters" class="special-characters" aria-label="Spanische Sonderzeichen" hidden></div>
-        <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
-        <div class="question-actions"><button id="check-answer" class="button button-primary" type="button">Prüfen</button><button id="next-question" class="button button-primary" type="button" hidden>Weiter</button></div>
+        <div class="question-main"><div class="question-meta"><span id="question-category" class="pill"></span><span id="question-mode" class="pill pill-soft"></span><span id="question-group" class="pill pill-muted"></span></div>
+          <p id="question-instruction" class="instruction"></p><h1 id="question-title"></h1><p id="question-context" class="question-context"></p>
+          <div id="answer-area" class="answer-area"></div><div id="special-characters" class="special-characters" aria-label="Spanische Sonderzeichen" hidden></div>
+          <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+          <div class="question-actions"><button id="check-answer" class="button button-primary" type="button">Prüfen</button><button id="next-question" class="button button-primary" type="button" hidden>Weiter</button></div>
+        </div>
+        <aside class="training-guide" aria-label="Begleitung durch die Verb-Akademie"><img src="assets/images/training-kolibri.webp" alt="Kolibri der Verb-Akademie neben einem offenen Übungsbuch" width="1400" height="933"><p id="guide-tip">Nimm dir kurz Zeit und achte auf das Muster.</p></aside>
       </article>
     </section>
 

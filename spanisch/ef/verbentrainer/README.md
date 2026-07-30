@@ -12,19 +12,24 @@ Die Lehrkraftseite liegt unter `lehrkraft.html`. Dort lassen sich ohne Quellcode
 - Anteile neuer, älterer und persönlicher Aufgaben
 - Mindestzahl älterer Aufgaben und Wiederholungsgrenze
 - verfügbare Aufgabentypen
+- eigene, im aktuellen Unterricht eingeführte Verben mit Quelle und sechs geprüften Präsensformen
 
 Jede Änderung wird als lokaler Entwurf unter `vamos-teacher-draft-v1` gespeichert und gilt sofort für die Trainervorschau im selben Browser. Die Schaltfläche „Datei für Veröffentlichung laden“ erzeugt eine fertige `teacher-settings.js`. Diese Datei ersetzt für eine Veröffentlichung die gleichnamige Projektdatei. Alternativ kann der Entwurf als JSON gesichert und später wieder eingelesen werden.
 
 Da die Anwendung statisch ist, kann die Browserseite Projektdateien nicht selbst überschreiben. Es gibt bewusst keine vorgetäuschte Passwortsicherung.
 
-## Aktuelle Freigabe
+Ein selbst ergänztes Verb wird im Browserentwurf sofort für die Vorschau nutzbar. Es wird erst öffentlich, wenn die neu exportierte `teacher-settings.js` in den Projektordner übernommen, committed und zu GitHub übertragen wurde. Eigene Verben lassen sich im Editor wieder löschen; bestehende materialbasierte Verben werden nur aktiviert, verschoben oder einer anderen Stufe zugeordnet.
+
+## Aktuelle Freigabe und Stufentraining
 
 In `config.js` steht `currentStage: 2`. Damit sind ausschließlich diese Verben sichtbar:
 
-1. Stufe 1: `ser`, `estar`
-2. Stufe 2: `hablar`, `trabajar`
+1. Stufe 1: `ser`, `estar`, `hablar`, `terminar`
+2. Stufe 2: `trabajar`, `charlar`
 
 Die nächsten Stufen sind vorbereitet, aber gesperrte Verben erscheinen weder in Aufgaben noch in Ablenkungen, Filtern oder Lernstatistiken.
+
+Freigegebene Stufenkarten sind anklickbar. „Diese Stufe üben“ trainiert gezielt die Verben dieser Stufe. Der große Startknopf bleibt das kumulative Standardtraining mit neuen, älteren und persönlichen Wiederholungen. Die Anzeige „Bis Stufe … freigegeben“ bezeichnet deshalb die Grenze der Lehrkraftfreigabe und nicht die einzige wählbare Stufe.
 
 ## Reihenfolge und Lernstufen ändern
 
@@ -53,19 +58,23 @@ Die Kontingente verhindern, dass persönliche Problemfälle alle anderen Inhalte
 
 Alle Werte stehen in `TEACHER_CONFIG.distribution` und `TEACHER_CONFIG.repetition`.
 
-## Neues Verb ergänzen
+## Neues Verb in der Lehrkraftversion ergänzen
 
-1. Infinitiv und eindeutige ID in `data/verbs.js` ergänzen.
-2. Materialbelegte deutsche Bedeutung eintragen.
-3. Sechs Präsensformen in der Reihenfolge `yo`, `tú`, `él/ella`, `nosotros/-as`, `vosotros/-as`, `ellos/ellas` prüfen.
-4. Gruppe, Lektion, Besonderheiten und mindestens eine Quelldatei angeben.
-5. Nur belegte Aufgabentypen freigeben.
-6. Einen Satz nur mit vollständigem Wortschatz- und Quellenbeleg ergänzen.
-7. Verb im `curriculum` an der gewünschten Position mit Stufe eintragen.
-8. Gewünschte Stufe in `config.js` freigeben.
-9. `node tests/quality-check.mjs` ausführen.
+1. Unter `lehrkraft.html` den Bereich „Eigenes Verb hinzufügen“ öffnen.
+2. Infinitiv und deutsche Bedeutung eintragen.
+3. Verbgruppe, Lernstufe und Lektion auswählen.
+4. Alle sechs Präsensformen in der angegebenen Personenfolge eintragen.
+5. Einen nachvollziehbaren Unterrichts- oder Materialhinweis als Quelle angeben.
+6. Die fachliche Prüfung bestätigen und das Verb hinzufügen.
+7. Das neue Verb bei Bedarf in der Liste verschieben oder einer anderen Stufe zuordnen.
+8. In der Trainervorschau testen.
+9. `teacher-settings.js` für die Veröffentlichung herunterladen und im Projekt ersetzen.
 
-Die künftige Lehrkraftansicht kann auf diesen getrennten Datenstrukturen aufbauen; eine unsichere Passwortsimulation ist nicht enthalten.
+Die Anwendung erzeugt keine Formen durch Raten. Unregelmäßigkeiten und Stammwechsel müssen von der Lehrkraft fachlich geprüft eingegeben werden. Eigene Verben erhalten ohne belegten Satz keine Lückensatzaufgaben. Eine unsichere Passwortsimulation ist nicht enthalten.
+
+## Verbgruppe erkennen
+
+Der frühere Multiple-Choice-Modus „Infinitiv erkennen“ wurde durch „Verbgruppe erkennen“ ersetzt. Zu einer konjugierten Form stehen immer vier Kategorien zur Auswahl: Verb auf `-ar`, Verb auf `-er`, Verb auf `-ir` oder unregelmäßiges Verb. Die eigentliche Gruppe wird während der Aufgabe nicht in den Metadaten verraten; nach der Antwort nennt das Feedback zusätzlich den Infinitiv.
 
 ## Lehrkraftkonfiguration
 
@@ -96,5 +105,10 @@ Die KI-generierten WebP-Dateien liegen in `assets/images/`:
 - `eingangshalle.webp`
 - `galerie-verwandlungen.webp`
 - `kammer-sonderformen.webp`
+- `abzeichen-erste-formen.webp`
+- `abzeichen-neue-sprachkraft.webp`
+- `abzeichen-nicht-vergessen.webp`
+- `abzeichen-fundament.webp`
+- `training-kolibri.webp`
 
-Sie wurden als zusammengehörige, textfreie Illustrationsserie für dieses Projekt erzeugt. Lerninformationen stehen immer zusätzlich als HTML-Text bereit.
+Sie wurden als zusammengehörige, textfreie Illustrationsserie für dieses Projekt erzeugt. Die Abzeichen besitzen sichtbare Bedingungen und Zustände; das Kolibri-Motiv begleitet die Aufgabenansicht. Lerninformationen stehen immer zusätzlich als HTML-Text bereit.

@@ -53,4 +53,29 @@ dialog { width: min(calc(100% - 2rem),39rem); max-height: calc(100vh - 2rem); pa
 @media (max-width: 900px) { .stage-list { grid-template-columns: repeat(2,1fr); }.hero-copy { width: 60%; }.focus-grid { grid-template-columns: 1fr; }.mastery-panel { grid-template-columns: 1fr; }.result-card { grid-template-columns: 1fr; }.result-card > img { height: 15rem; }.mode-grid { grid-template-columns: repeat(2,1fr); } }
 @media (max-width: 680px) { .app-header { position: sticky; top: 0; }.hero { min-height: 39rem; }.hero > img { height: 17rem; object-position: 70% center; }.hero-copy { justify-content: flex-end; width: 100%; min-height: 39rem; padding: 18rem 1.25rem 1.4rem; background: linear-gradient(180deg,transparent 10rem,var(--cream) 18rem); }.hero h1 { font-size: 3.1rem; }.section-heading { align-items: flex-start; flex-direction: column; }.stat-grid { grid-template-columns: repeat(2,1fr); }.choice-grid { grid-template-columns: 1fr; }.training-topbar { align-items: stretch; flex-direction: column; } }
 @media (max-width: 480px) { main { width: min(calc(100% - 1rem),var(--max)); padding-top: .6rem; }.brand small,.xp-chip { display: none; }.hero,.question-card,.result-card { border-radius: 1rem; }.hero-copy { padding-inline: 1rem; }.mix-note { font-size: .8rem; }.stage-list,.mode-grid,.stat-grid { grid-template-columns: 1fr; }.stage-card { min-height: 0; }.stage-card img { height: 8rem; }.result-actions { flex-direction: column; }.result-actions .button { width: 100%; }.check-grid { grid-template-columns: 1fr; }.mastery-row { grid-template-columns: 5rem 1fr 2.8rem; } }
+
+.section-note { max-width: 48rem; margin: -.6rem 0 1.3rem; color: var(--muted); }
+button.stage-card { width: 100%; padding: 0; color: var(--ink); text-align: left; font: inherit; cursor: pointer; }
+button.stage-card:hover { border-color: var(--turquoise); box-shadow: 0 16px 34px rgba(16,45,67,.14); transform: translateY(-2px); }
+button.stage-card:focus-visible { outline: 4px solid var(--gold); outline-offset: 3px; }
+.stage-cta { display: inline-flex; margin-top: .9rem; color: var(--teal); font-size: .82rem; font-weight: 900; }
+.badge-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-top: 2.2rem; }
+.badge-heading h3 { margin: 0; color: var(--navy-deep); font-size: 1.45rem; }
+.badge-heading > p { max-width: 30rem; margin: 0; color: var(--muted); font-size: .88rem; }
+.badge-list { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+.badge-card { overflow: hidden; border: 1px solid #ead6a8; border-radius: 1rem; background: white; box-shadow: 0 10px 24px rgba(16,45,67,.07); }
+.badge-card img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.badge-card > div { padding: .85rem; }
+.badge-card h4 { margin: .18rem 0 .3rem; color: var(--navy-deep); font-size: 1rem; }
+.badge-card p { margin: 0; color: var(--muted); font-size: .78rem; }
+.badge-state { color: var(--teal); font-size: .68rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.badge-card.locked { filter: saturate(.45); opacity: .62; }
+.badge-card.locked .badge-state { color: var(--muted); }
+.question-card { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(13rem,.65fr); gap: clamp(1rem,4vw,2.5rem); padding: clamp(1.2rem,4vw,2.5rem); }
+.question-main { min-width: 0; }
+.training-guide { overflow: hidden; align-self: start; border: 1px solid #ead6a8; border-radius: 1rem; background: var(--gold-soft); }
+.training-guide img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 65% center; }
+.training-guide p { margin: 0; padding: .85rem; color: #665022; font-size: .83rem; font-weight: 750; }
+@media (max-width: 900px) { .badge-list { grid-template-columns: repeat(2,1fr); }.question-card { grid-template-columns: 1fr; }.training-guide { display: grid; grid-template-columns: 10rem 1fr; align-items: center; }.training-guide img { height: 100%; aspect-ratio: auto; }.training-guide p { font-size: .9rem; } }
+@media (max-width: 560px) { .badge-heading { align-items: flex-start; flex-direction: column; }.badge-list { grid-template-columns: 1fr 1fr; gap: .6rem; }.badge-card > div { padding: .65rem; }.badge-card p { font-size: .72rem; }.training-guide { grid-template-columns: 7rem 1fr; }.training-guide p { font-size: .78rem; } }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; transition: none !important; } }

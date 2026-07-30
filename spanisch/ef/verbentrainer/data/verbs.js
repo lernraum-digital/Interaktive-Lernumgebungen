@@ -15,7 +15,7 @@
     list7: "Verbentrainer Material/Bildschirmfoto 2026-07-30 um 11.44.45.png",
   };
   function verb(id, infinitive, meaning, forms, group, lesson, options = {}) {
-    return { id, infinitive, meaning, forms, group, lesson, topic: options.topic || "Grundwortschatz", regular: options.regular !== false, irregularity: options.irregularity || null, stemChange: options.stemChange || null, yoSpecial: options.yoSpecial || null, difficulty: options.difficulty || 1, persons: P, sentences: options.sentences || [], sources: options.sources || [source.basic], active: options.active !== false, taskTypes: options.taskTypes || ["write", "choice", "person", "infinitive"] };
+    return { id, infinitive, meaning, forms, group, lesson, topic: options.topic || "Grundwortschatz", regular: options.regular !== false, irregularity: options.irregularity || null, stemChange: options.stemChange || null, yoSpecial: options.yoSpecial || null, difficulty: options.difficulty || 1, persons: P, sentences: options.sentences || [], sources: options.sources || [source.basic], active: options.active !== false, taskTypes: options.taskTypes || ["write", "choice", "person", "verbGroup"] };
   }
   const verbs = [
     verb("hablar", "hablar", "sprechen", ["hablo","hablas","habla","hablamos","habláis","hablan"], "-ar", "U1", { sources:[source.basic,source.u1,source.list1], sentences:[{ text:"Marta ___ alemán y español.", person:2, answer:"habla", vocabulary:["Marta","alemán","español"], source:source.list1 }] }),
@@ -61,18 +61,18 @@
     verb("terminar", "terminar", "(be)enden", ["termino","terminas","termina","terminamos","termináis","terminan"], "-ar", "U4", { sources:[source.basic,source.list7], sentences:[{ text:"¿A qué hora ___ el concierto?", person:2, answer:"termina", vocabulary:["a qué hora","concierto"], source:source.list7 }] }),
   ];
   const curriculum = [
-    ["ser",1],["estar",1],
-    ["hablar",2],["trabajar",2],
-    ["charlar",3],["escuchar",3],
-    ["terminar",4],["bailar",4],["estudiar",4],
-    ["preparar",5],["practicar",5],["comprar",5],["tomar",5],
-    ["comer",6],["beber",6],["aprender",6],["comprender",6],["leer",6],["escribir",6],
-    ["vivir",7],["subir",7],["quedar",7],["necesitar",7],
-    ["tener",8],["querer",8],
-    ["poder",9],["probar",9],["costar",9],
-    ["hacer",10],["salir",10],["ver",10],["dar",10],
-    ["jugar",11],["tocar",11],["contestar",11],["entender",11],
-    ["ir",12],["saber",12],["parecer",12],["abrir",12],["empezar",12]
+    ["ser",1],["estar",1],["hablar",1],["terminar",1],
+    ["trabajar",2],["charlar",2],
+    ["escuchar",3],["bailar",3],["estudiar",3],
+    ["preparar",4],["practicar",4],["comprar",4],["tomar",4],
+    ["comer",5],["beber",5],["aprender",5],["comprender",5],["leer",5],
+    ["escribir",6],["vivir",6],["subir",6],["quedar",6],["necesitar",6],
+    ["tener",7],["querer",7],
+    ["poder",8],["probar",8],["costar",8],
+    ["hacer",9],["salir",9],["ver",9],["dar",9],
+    ["jugar",10],["tocar",10],["contestar",10],["entender",10],
+    ["ir",11],["saber",11],["parecer",11],
+    ["abrir",12],["empezar",12]
   ];
   const order = new Map(curriculum.map(([id, stage], index) => [id, { stage, sequence:index + 1 }]));
   verbs.forEach(v => {
