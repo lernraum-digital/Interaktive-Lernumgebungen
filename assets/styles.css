@@ -115,10 +115,10 @@ p {
   isolation: isolate;
   overflow: hidden;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(12rem, 22rem);
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 19rem);
   align-items: center;
   gap: clamp(1.5rem, 5vw, 4rem);
-  padding: clamp(2rem, 6vw, 4.5rem);
+  padding: clamp(2rem, 5vw, 3.75rem);
   border: 1px solid #E7DDCC;
   border-radius: var(--radius-large);
   background: var(--beige);
@@ -170,11 +170,13 @@ p {
 
 .intro-image {
   display: block;
-  width: 100%;
+  width: min(100%, 19rem);
+  height: auto;
   aspect-ratio: 1;
-  border: 1px solid var(--border);
-  border-radius: 1.25rem;
-  background: var(--white);
+  justify-self: end;
+  border: 1px solid #E7DDCC;
+  border-radius: 1.1rem;
+  background: var(--beige);
   box-shadow: var(--shadow-small);
   object-fit: contain;
 }
@@ -231,6 +233,8 @@ p {
 
 .card-grid-three {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 64rem;
+  margin-inline: auto;
 }
 
 .image-card,
@@ -247,13 +251,15 @@ p {
 
 .image-card {
   display: flex;
-  min-height: 100%;
+  min-height: 0;
   flex-direction: column;
 }
 
 .image-card img {
   display: block;
   width: 100%;
+  height: auto;
+  flex: 0 0 auto;
   aspect-ratio: 1;
   background: var(--beige);
   object-fit: contain;
@@ -265,7 +271,9 @@ p {
   justify-content: space-between;
   gap: 1rem;
   padding: 1.1rem 1.25rem;
+  border-top: 1px solid var(--border);
   color: var(--blue);
+  background: var(--white);
   font-size: clamp(1.2rem, 2.5vw, 1.45rem);
   font-weight: 800;
 }
@@ -418,7 +426,8 @@ p {
   }
 
   .intro-image {
-    width: min(100%, 18rem);
+    width: min(100%, 17rem);
+    justify-self: center;
   }
 
   .material-card img {
