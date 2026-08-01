@@ -1,0 +1,118 @@
+/* Keep the interactive start/end content above the decorative pseudo-background. */
+.start-screen > *,
+.end-screen > * {
+  position: relative;
+  z-index: 1;
+}
+
+.source-note {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  margin-top: 24px;
+}
+
+.start-screen,
+.end-screen {
+  background: #17213d;
+  color: #fff;
+}
+.start-screen::before,
+.end-screen::before {
+  background:
+    linear-gradient(180deg, #2a3261 0%, #17213d 70%),
+    repeating-linear-gradient(0deg, transparent 0 24px, #7657bc22 25px 26px);
+  opacity: 1;
+}
+.start-screen::after,
+.end-screen::after { color: #39b9ae; opacity: .22; }
+.start-screen .lead { color: #d9deef; }
+.start-screen .tiny,
+.start-screen .source-note { color: #aeb8d7; }
+.character-card { background: #27345e; color: #fff; border-color: #405080; }
+.character-card.selected { background: #354674; border-color: #ffd267; box-shadow: 0 8px 0 #7657bc; }
+.character-card .avatar-preview { background-color: #10182e; border: 2px solid #ffd267; }
+.start-screen h1, .end-screen h1 { text-shadow: 4px 4px 0 #0d1328; }
+
+/* v2: a long, camera-following platform lane with grounded sprites. */
+.game-screen,
+.hud,
+.level-bar,
+.upgrade-bar,
+.task-card,
+.help-card {
+  font-family: "Courier New", ui-monospace, monospace;
+  letter-spacing: .01em;
+}
+.world {
+  background-color: #272a68;
+  background-size: auto 100%;
+  background-position: left bottom;
+}
+.camera {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3200px;
+  height: 100%;
+  transform: translateX(0);
+  transition: transform .08s linear;
+  background-image: url('assets/background.png');
+  background-size: 800px 100%;
+  background-position: left bottom;
+  background-repeat: repeat-x;
+}
+.parallax { width: 3200px; background-size: 1600px 100%; background-repeat: repeat-x; opacity: .5; }
+.moon { right: auto; left: 2100px; }
+.platforms,.items { width: 3200px; height: 100%; }
+.platform {
+  height: 30px;
+  border-top-width: 8px;
+  border-radius: 4px;
+  image-rendering: pixelated;
+}
+.platform::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, #6d3540 0 4px, transparent 4px 58px);
+  opacity: .65;
+}
+.collectible {
+  width: 72px;
+  height: 84px;
+  background-image: var(--collectible-image, none);
+  background-size: 600% 300%;
+  background-position: var(--card-pos, 0%) 0%;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 7px 0 #17213d99);
+  animation: card-float 1.2s steps(2,end) infinite;
+}
+.collectible::after { content: "WORTKARTE"; top: auto; bottom: -18px; right: auto; left: 50%; transform: translateX(-50%); font: 700 8px "Courier New",monospace; color: #fff4d3; white-space: nowrap; text-shadow: 2px 2px #17213d; }
+.upgrade {
+  width: 70px;
+  height: 70px;
+  background-image: var(--collectible-image, none);
+  background-size: 900% 300%;
+  background-position: var(--upgrade-pos, 0%) 50%;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 6px 0 #17213d99);
+}
+.upgrade::after { content: "UPGRADE"; position: absolute; left: 50%; top: 72px; transform: translateX(-50%); font: 700 8px "Courier New",monospace; color: #ffd267; white-space: nowrap; text-shadow: 2px 2px #17213d; }
+@keyframes card-float { 50% { transform: translateY(-9px) rotate(-2deg); } }
+.player { left: 120px; bottom: 72px; image-rendering: pixelated; }
+.finish-flag { right: auto; left: 3060px; bottom: 78px; font-family: monospace; }
+.task-card,.help-card { border: 4px solid #7657bc; box-shadow: 8px 8px 0 #17213d; border-radius: 8px; }
+.task-top { border-bottom: 3px solid #e5b54a; padding-bottom: 10px; }
+.task-card h2 { text-shadow: 2px 2px 0 #e5d8c8; }
+.text-answer { border: 3px solid #7657bc; border-radius: 4px; font-family: "Courier New",monospace; min-height: 58px; }
+.input-label { display: block; margin: 0 0 8px; color: #7657bc; font: 700 12px "Courier New",monospace; text-transform: uppercase; }
+.answer-option { border: 3px solid #7657bc; border-radius: 4px; font-family: "Courier New",monospace; }
+.primary-btn { border-radius: 4px; font-family: "Courier New",monospace; text-transform: uppercase; letter-spacing: .02em; }
+@media (max-width: 600px) {
+  .camera { width: 2800px; }
+  .platforms,.items,.parallax { width: 2800px; }
+  .collectible { width: 60px; height: 70px; background-size: 600% 300%; }
+  .upgrade { width: 58px; height: 58px; background-size: 900% 300%; }
+  .upgrade::after { top: 60px; }
+}
