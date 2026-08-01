@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#070b24">
+  <meta name="description" content="Número Invasores – Spanische Zahlen als rasantes 2D-Arcade-Game üben.">
+  <title>Número Invasores · Spanische Zahlen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app" id="app">
+    <section class="screen start-screen is-active" id="startScreen" aria-labelledby="gameTitle">
+      <div class="star-noise" aria-hidden="true"></div>
+      <div class="start-inner">
+        <p class="kicker">Entrenamiento galáctico</p>
+        <h1 id="gameTitle"><span>NÚMERO</span> INVASORES</h1>
+        <p class="tagline">Lies das spanische Zahlwort. Triff die richtige Ziffer. Rette die Galaxie.</p>
+
+        <section class="mission-panel" aria-labelledby="missionHeading">
+          <div class="section-title">
+            <span>01</span>
+            <div><p>Mission wählen</p><h2 id="missionHeading">Zahlenraum</h2></div>
+          </div>
+          <div class="mode-grid" id="modeGrid"></div>
+        </section>
+
+        <section class="level-panel" aria-labelledby="levelHeading">
+          <div class="section-title">
+            <span>02</span>
+            <div><p>Automatischer Fortschritt</p><h2 id="levelHeading">Deine Level-Reise</h2></div>
+          </div>
+          <div class="journey-row">
+            <div class="level-journey" id="levelJourney" aria-label="Level-Fortschritt"></div>
+            <p class="journey-copy" id="journeyCopy"></p>
+          </div>
+        </section>
+
+        <section class="options-panel" aria-labelledby="optionsHeading">
+          <div class="section-title">
+            <span>03</span>
+            <div><p>Für dich einstellen</p><h2 id="optionsHeading">Spielart & Steuerung</h2></div>
+          </div>
+          <div class="option-groups">
+            <fieldset class="choice-group">
+              <legend>Spielart</legend>
+              <button class="choice-button is-selected" data-play-style="mission"><strong>♥ Mission</strong><small>3 Leben · Levelziel 80 %</small></button>
+              <button class="choice-button" data-play-style="training"><strong>∞ Training</strong><small>Ohne Game-over üben</small></button>
+            </fieldset>
+            <fieldset class="choice-group">
+              <legend>Touch-Steuerung</legend>
+              <button class="choice-button is-selected" data-handed="right"><strong>⇦ Rechts</strong><small>Pfeile links · Fuego rechts</small></button>
+              <button class="choice-button" data-handed="left"><strong>Links ⇨</strong><small>Fuego links · Pfeile rechts</small></button>
+            </fieldset>
+          </div>
+        </section>
+
+        <section class="hangar-panel" aria-labelledby="hangarHeading">
+          <div class="section-title">
+            <span>04</span>
+            <div><p>Belohnungen einsetzen</p><h2 id="hangarHeading">Dein Hangar</h2></div>
+          </div>
+          <p class="hangar-intro"><span id="badgeCount">0</span> Abzeichen gesammelt · Meistere Level, schalte neue Schiffe frei und wähle sie hier aus.</p>
+          <div class="ship-grid" id="shipGrid"></div>
+          <button class="reset-progress" id="resetProgressButton">↻ Lernfortschritt zurücksetzen</button>
+        </section>
+
+        <div class="launch-row">
+          <div class="tip" id="modeTip"><span>♥ ♥ ♥</span><p><strong>3 Leben</strong> · Fehler zeigen dir sofort die richtige Lösung.</p></div>
+          <button class="launch-button" id="launchButton">MISSION STARTEN <span>▶</span></button>
+        </div>
+        <button class="how-button" id="howButton">? Spielregeln</button>
+      </div>
+    </section>
+
+    <section class="screen game-screen" id="gameScreen" aria-label="Spielbereich">
+      <aside class="side-panel side-panel-left" aria-label="Missionsinformationen">
+        <p class="side-kicker">Aktive Mission</p>
+        <strong id="sideMode">ÓRBITA 0–20</strong>
+        <div class="side-level"><small>LEVEL</small><b id="sideLevel">01</b></div>
+        <p id="sideRange">Zahlen 0–10 · Eingewöhnung</p>
+        <p class="side-ship">Schiff: <strong id="sideShip">Cadete</strong></p>
+        <div class="side-divider"></div>
+        <small>STEUERUNG</small>
+        <p>← → oder A / D<br>Leertaste: Fuego</p>
+      </aside>
+      <aside class="side-panel side-panel-right" aria-label="Levelstatus">
+        <p class="side-kicker">Flugprotokoll</p>
+        <div class="side-metric"><small>RICHTIG</small><strong id="sideCorrect">0</strong></div>
+        <div class="side-metric"><small>QUOTE</small><strong id="sideAccuracy">–</strong></div>
+        <div class="side-divider"></div>
+        <p class="side-tip">Ausweichen ist erlaubt: Ein verpasstes Ziel senkt nur die Quote. Leben verlierst du nur durch einen falschen Schuss oder Zusammenstoß.</p>
+      </aside>
+
+      <div class="playfield" id="playfield">
+        <div class="game-bg" id="gameBg"></div>
+        <header class="hud">
+          <button class="icon-button" id="pauseButton" aria-label="Spiel pausieren">Ⅱ</button>
+          <div class="hud-stat"><small>PUNKTE</small><strong id="scoreValue">0000</strong></div>
+          <div class="hud-mission"><small id="missionLabel">ORBITA 0–20</small><strong id="progressValue">1 / 5</strong></div>
+          <div class="hud-stat lives"><small id="livesLabel">LEBEN</small><strong id="livesValue" aria-label="3 Leben">♥♥♥</strong></div>
+          <button class="icon-button" id="soundButton" aria-label="Ton ausschalten">♪</button>
+        </header>
+
+        <div class="prompt-card">
+          <small>TRIFF DIE ZAHL</small>
+          <div class="prompt-row"><strong id="wordPrompt">diecisiete</strong></div>
+          <div class="combo" id="comboValue">COMBO ×1</div>
+        </div>
+
+        <canvas id="gameCanvas" aria-label="Arcade-Spiel mit fallenden Zahlen"></canvas>
+        <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+
+        <div class="touch-controls" aria-label="Touch-Steuerung">
+          <div class="move-controls">
+            <button id="leftButton" aria-label="Nach links">◀</button>
+            <button id="rightButton" aria-label="Nach rechts">▶</button>
+          </div>
+          <button class="fire-button" id="fireButton" aria-label="Schießen"><span>●</span> FUEGO</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="modal" id="howModal" role="dialog" aria-modal="true" aria-labelledby="howTitle" hidden>
+      <div class="modal-card">
+        <button class="modal-close" data-close aria-label="Schließen">×</button>
+        <p class="kicker">Briefing</p><h2 id="howTitle">Deine Mission</h2>
+        <div class="rule-grid">
+          <article><span>1</span><h3>Zahlwort lesen</h3><p>Lies das spanische Zahlwort oben auf der Flugbahn aufmerksam.</p></article>
+          <article><span>2</span><h3>Ziffer finden</h3><p>Bewege dein Schiff und schieße ausschließlich auf die passende Ziffer.</p></article>
+          <article><span>3</span><h3>Treffen oder ausweichen</h3><p>Ein falscher Treffer oder Zusammenstoß kostet ein Leben. Läuft das Ziel vorbei, sinkt nur deine Trefferquote.</p></article>
+        </div>
+        <p class="controls-hint">iPad: Bildschirmtasten, auf Wunsch gespiegelt für Linkshänder · Tastatur: ← → oder A/D und Leertaste · Die Level laufen der Reihe nach. Ab 80 % ist ein Level geschafft.</p>
+        <button class="primary-small" data-close>¡Entendido!</button>
+      </div>
+    </div>
+
+    <div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle" hidden>
+      <div class="modal-card result-card">
+        <p class="result-stars" id="resultStars">★★★</p>
+        <p class="kicker" id="resultKicker">Misión cumplida</p>
+        <h2 id="resultTitle">¡Excelente!</h2>
+        <p id="resultText"></p>
+        <div class="result-stats"><span><small>PUNKTE</small><strong id="finalScore">0</strong></span><span><small>TREFFER</small><strong id="accuracyValue">0%</strong></span></div>
+        <div class="result-actions"><button class="secondary" id="menuButton">Missionen</button><button class="primary-small" id="nextButton">Nächstes Level</button></div>
+      </div>
+    </div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
