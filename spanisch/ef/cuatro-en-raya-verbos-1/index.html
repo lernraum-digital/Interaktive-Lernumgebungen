@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#164f78">
+  <meta name="description" content="Cuatro en raya – EF · Verbos 1: zwölf wichtige Verben im Presente sowie ser und estar spielerisch wiederholen.">
+  <title>Cuatro en raya · EF · Verbos 1</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="screen start-screen is-active" id="startScreen" aria-labelledby="gameTitle">
+      <div class="start-card">
+        <p class="eyebrow">EF · Verbos 1</p>
+        <h1 id="gameTitle">Cuatro en raya</h1>
+        <p class="lead"><strong>Presente básico:</strong> Konjugiert zwölf wichtige Verben und entscheidet in einfachen Sätzen zwischen <em>ser</em> und <em>estar</em>. Sammelt Punkte und Bonuspunkte für Viererreihen. Die Partie endet nach 18 Zügen pro Person.</p>
+
+        <div class="name-grid">
+          <label class="player-name player-one-name">
+            <span><i aria-hidden="true"></i> Spieler:in oder Team 1</span>
+            <input id="playerOneName" maxlength="22" autocomplete="off" placeholder="z. B. Ana oder Los Soles">
+          </label>
+          <label class="player-name player-two-name">
+            <span><i aria-hidden="true"></i> Spieler:in oder Team 2</span>
+            <input id="playerTwoName" maxlength="22" autocomplete="off" placeholder="z. B. Carlos oder Las Olas">
+          </label>
+        </div>
+
+        <div class="rules-strip" aria-label="Kurzregeln">
+          <article><strong>2 / 1</strong><span>Punkte ohne / mit Pista</span></article>
+          <article><strong>+3</strong><span>für jede neue Viererreihe</span></article>
+          <article><strong>18</strong><span>Züge pro Person</span></article>
+          <article><strong>◆</strong><span>2 Fehler blockieren das Feld</span></article>
+        </div>
+
+        <div class="start-actions">
+          <button class="primary-button" id="startButton">Partie starten <span aria-hidden="true">→</span></button>
+          <button class="text-button" id="openRulesButton">Wie wird gespielt?</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen game-screen" id="gameScreen" aria-label="Spielbereich">
+      <header class="game-header">
+        <button class="icon-button" id="homeButton" aria-label="Zur Startseite">⌂</button>
+        <div class="round-display"><small>RUNDE</small><strong><span id="roundNumber">1</span> / 18</strong></div>
+        <div class="turn-pill" id="turnPill"><i aria-hidden="true"></i><span id="turnName">Spieler:in 1</span> ist dran</div>
+        <button class="icon-button" id="soundButton" aria-label="Töne ausschalten">♪</button>
+      </header>
+
+      <div class="game-layout">
+        <aside class="score-card player-one-score is-active" id="playerOneCard">
+          <div class="score-token" aria-hidden="true"></div>
+          <small>TEAM CORAL</small>
+          <h2 id="playerOneDisplay">Spieler:in 1</h2>
+          <strong class="score-number" id="playerOneScore">0</strong>
+          <span>Punkte</span>
+          <dl><div><dt>Gelöst</dt><dd id="playerOneSolved">0</dd></div><div><dt>Viererreihen</dt><dd id="playerOneLines">0</dd></div></dl>
+        </aside>
+
+        <section class="board-area" aria-label="Spielfeld">
+          <p class="board-instruction" id="boardInstruction">Wähle eine Spalte für deinen Spielstein.</p>
+          <div class="column-buttons" id="columnButtons" aria-label="Spalte auswählen"></div>
+          <div class="game-board" id="gameBoard" role="grid" aria-label="Sechs mal sechs Spielfeld"></div>
+          <div class="board-legend"><span><i class="legend-pending"></i> zweite Chance</span><span><i class="legend-blocked"></i> blockiert</span><span>Viererreihe = 3 Bonuspunkte</span></div>
+        </section>
+
+        <aside class="score-card player-two-score" id="playerTwoCard">
+          <div class="score-token" aria-hidden="true"></div>
+          <small>TEAM TURQUESA</small>
+          <h2 id="playerTwoDisplay">Spieler:in 2</h2>
+          <strong class="score-number" id="playerTwoScore">0</strong>
+          <span>Punkte</span>
+          <dl><div><dt>Gelöst</dt><dd id="playerTwoSolved">0</dd></div><div><dt>Viererreihen</dt><dd id="playerTwoLines">0</dd></div></dl>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen result-screen" id="resultScreen" aria-labelledby="resultTitle">
+      <div class="result-card">
+        <p class="eyebrow">Partida terminada</p>
+        <div class="result-emblem" aria-hidden="true">✦</div>
+        <h1 id="resultTitle">¡Enhorabuena!</h1>
+        <p class="result-lead" id="resultLead"></p>
+        <div class="final-scores" id="finalScores"></div>
+        <div class="learning-summary" id="learningSummary"></div>
+        <div class="result-actions"><button class="primary-button" id="rematchButton">Revanche</button><button class="secondary-button" id="newGameButton">Neue Namen</button></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="questionModal" role="dialog" aria-modal="true" aria-labelledby="questionTitle" hidden>
+    <div class="modal-card question-card">
+      <div class="question-head">
+        <div><p class="question-meta" id="questionMeta"></p><h2 id="questionTitle"></h2></div>
+        <span class="points-badge" id="pointsBadge">2 Punkte</span>
+      </div>
+      <div id="questionMedia"></div>
+      <form id="questionForm"><div id="answerArea"></div><div class="question-actions"><button type="button" class="hint-button" id="hintButton">Pista</button><button type="submit" class="primary-button" id="submitAnswer">Antwort prüfen</button></div></form>
+      <div class="hint-box" id="hintBox" hidden></div>
+    </div>
+  </div>
+
+  <div class="modal" id="feedbackModal" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle" hidden>
+    <div class="modal-card feedback-card">
+      <div class="feedback-icon" id="feedbackIcon" aria-hidden="true"></div>
+      <p class="eyebrow" id="feedbackKicker"></p>
+      <h2 id="feedbackTitle"></h2>
+      <p class="feedback-points" id="feedbackPoints"></p>
+      <div class="explanation" id="feedbackExplanation"></div>
+      <button class="primary-button" id="continueButton">Weiter</button>
+    </div>
+  </div>
+
+  <div class="modal" id="rulesModal" role="dialog" aria-modal="true" aria-labelledby="rulesTitle" hidden>
+    <div class="modal-card rules-card">
+      <button class="modal-close" data-close-rules aria-label="Schließen">×</button>
+      <p class="eyebrow">Reglas del juego</p><h2 id="rulesTitle">So funktioniert die Partie</h2>
+      <ol><li>Wähle eine Spalte. Die Aufgabe entscheidet über das nächste freie Feld.</li><li>Richtig ohne Hilfe: 2 Punkte. Mit Pista: 1 Punkt.</li><li>Nach dem ersten Fehler bleibt das Feld als „zweite Chance“ frei. Beim nächsten Versuch erscheint eine andere Aufgabe.</li><li>Erst ein zweiter Fehler auf demselben Feld blockiert es dauerhaft. Darüber kann weitergespielt werden.</li><li>Jede neue Viererreihe bringt 3 Bonuspunkte. Das Spiel läuft trotzdem weiter.</li><li>Nach 18 Zügen pro Person gewinnt die höchste Gesamtpunktzahl.</li></ol>
+      <button class="primary-button" data-close-rules>¡Entendido!</button>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
