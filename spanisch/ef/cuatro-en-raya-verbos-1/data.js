@@ -20,7 +20,7 @@
   ];
 
   const verbs = [
-    { infinitive: "ser", group: "unregelmäßig", forms: ["soy", "eres", "es", "somos", "sois", "son"], complement: "estudiante", vocab: [{ es: "estudiante", de: "Schüler/in" }] },
+    { infinitive: "ser", group: "unregelmäßig", forms: ["soy", "eres", "es", "somos", "sois", "son"], complement: "estudiante", vocab: [{ es: "estudiante(s)", de: "Schüler/in(nen)" }] },
     { infinitive: "estar", group: "unregelmäßig", forms: ["estoy", "estás", "está", "estamos", "estáis", "están"], complement: "en Madrid" },
     { infinitive: "hablar", group: "-ar", forms: ["hablo", "hablas", "habla", "hablamos", "habláis", "hablan"], complement: "español" },
     { infinitive: "charlar", group: "-ar", forms: ["charlo", "charlas", "charla", "charlamos", "charláis", "charlan"], complement: "con Ana", vocab: [{ es: "charlar", de: "sich unterhalten" }, { es: "con", de: "mit" }] },
@@ -57,8 +57,69 @@
     return rotatedOptions(indexes.map((index) => verb.forms[index]), taskIndex % 4);
   }
 
+  function complementFor(verb, personIndex) {
+    if (verb.infinitive === "ser" && personIndex >= 3) return "estudiantes";
+    return verb.complement;
+  }
+
   function sentenceFor(verb, personIndex) {
-    return `${persons[personIndex].subject} ${verb.forms[personIndex]} ${verb.complement}`;
+    return `${persons[personIndex].subject} ${verb.forms[personIndex]} ${complementFor(verb, personIndex)}`;
+  }
+
+  function scrambleTokens(tokens, seed) {
+    const copy = [...tokens];
+    let value = seed + 19;
+    for (let index = copy.length - 1; index > 0; index -= 1) {
+      value = (value * 37 + 17) % 997;
+      const swapIndex = value % (index + 1);
+      [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+    }
+    if (copy.join(" ") === tokens.join(" ")) copy.reverse();
+    return copy;
+  }
+
+  function buildOrderTask(verb, verbIndex, personIndex, answer, hint, vocab) {
+    const taskComplement = complementFor(verb, personIndex);
+    const complement = taskComplement.split(" ");
+    let tokens;
+    let sentence;
+    let subjectHint;
+
+    if (personIndex === 0) {
+      tokens = ["Yo", "no", answer, ...complement];
+      sentence = `Yo no ${answer} ${taskComplement}`;
+      subjectHint = "Yo verlangt die 1. Person Singular; no steht direkt vor dem Verb.";
+    } else if (personIndex === 1) {
+      tokens = ["Paco,", `¿${answer}`, ...complement.slice(0, -1), `${complement.at(-1)}?`];
+      sentence = `Paco, ¿${answer} ${taskComplement}?`;
+      subjectHint = "Paco wird direkt angesprochen. Deshalb brauchst du die Form für tú.";
+    } else if (personIndex === 2) {
+      tokens = ["Luisa", answer, ...complement];
+      sentence = `Luisa ${answer} ${taskComplement}`;
+      subjectHint = "Luisa entspricht ella, also der 3. Person Singular.";
+    } else if (personIndex === 3) {
+      tokens = ["Luisa", "y", "yo", answer, ...complement];
+      sentence = `Luisa y yo ${answer} ${taskComplement}`;
+      subjectHint = "Luisa y yo entspricht nosotros/nosotras.";
+    } else if (personIndex === 4) {
+      tokens = ["Paco", "y", "tú", answer, ...complement];
+      sentence = `Paco y tú ${answer} ${taskComplement}`;
+      subjectHint = "Paco y tú entspricht in Spanien vosotros.";
+    } else {
+      tokens = ["Juani", "y", "Paco", "no", answer, ...complement];
+      sentence = `Juani y Paco no ${answer} ${taskComplement}`;
+      subjectHint = "Juani y Paco entspricht ellos; no steht direkt vor dem Verb.";
+    }
+
+    order(
+      "Satz ordnen",
+      `Ordne einen korrekten Satz mit ${verb.infinitive}. Achte darauf, wer handelt oder angesprochen wird.`,
+      scrambleTokens(tokens, verbIndex * 11 + personIndex),
+      sentence,
+      `${subjectHint} ${hint}`,
+      `<strong>${sentence}</strong> ${subjectHint}`,
+      { vocab }
+    );
   }
 
   // 72 Grundaufgaben: jede Kombination aus 12 Verben und 6 Personen kommt genau einmal vor.
@@ -69,7 +130,8 @@
       const hint = hintFor(verb, personIndex);
       const explanation = `<strong>${person.label} + ${verb.infinitive} = ${answer}</strong>. Der vollständige Beispielsatz lautet: ${sentenceFor(verb, personIndex)}.`;
       const vocab = verb.vocab || [];
-      const format = taskIndex % 6;
+      // Der Versatz verhindert, dass ein Aufgabenformat immer an dieselbe Person gekoppelt ist.
+      const format = (verbIndex + personIndex) % 6;
 
       if (format === 0) {
         text("Konjugieren", `Konjugiere ${verb.infinitive} für ${person.label}. Gib nur die Verbform ein.`, [answer], hint, explanation);
@@ -77,13 +139,12 @@
         choice("Form wählen", `Welche Form von ${verb.infinitive} passt zu ${person.label}?`, formOptions(verb, personIndex, taskIndex), answer, hint, explanation);
       } else if (format === 2) {
         const wrong = verb.forms[(personIndex + 2) % 6];
-        text("Fehler korrigieren", `Korrigiere nur die Verbform: ${person.subject} ${wrong} ${verb.complement}.`, [answer], hint, explanation, { vocab });
+        text("Fehler korrigieren", `Korrigiere nur die Verbform: ${person.subject} ${wrong} ${complementFor(verb, personIndex)}.`, [answer], hint, explanation, { vocab });
       } else if (format === 3) {
         const labels = persons.map((item) => item.label);
         choice("Subjekt erkennen", `Welche Person passt zur Form „${answer}“ von ${verb.infinitive}?`, rotatedOptions(labels, taskIndex % labels.length), person.label, `Vergleiche die Endung mit den sechs Personenformen von ${verb.infinitive}.`, explanation);
       } else if (format === 4) {
-        const tokens = [person.subject, answer, ...verb.complement.split(" ")];
-        order("Satz ordnen", `Ordne die Bausteine. Das Verb ist ${verb.infinitive} für ${person.label}.`, tokens, sentenceFor(verb, personIndex), hint, explanation, { vocab });
+        buildOrderTask(verb, verbIndex, personIndex, answer, hint, vocab);
       } else {
         const sourceIndex = (personIndex + 5) % 6;
         text("Form wechseln", `Wechsle die Person: ${persons[sourceIndex].label} ${verb.forms[sourceIndex]} → ${person.label} ___. Gib nur die neue Verbform ein.`, [answer], hint, explanation);
