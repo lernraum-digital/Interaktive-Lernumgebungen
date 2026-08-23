@@ -5,3 +5,15 @@ spanisch/ef/Verbentrainer Material/
 
 # Versehentlich im Projektstamm abgelegtes Arbeits-Screenshot.
 /Bildschirmfoto 2026-07-30 um 11.44.21.png
+
+# Lokale Paket- und Arbeitsverzeichnisse – nicht veröffentlichen.
+/.pnpm-store/
+/tmp/
+/spanisch/ef/Atrapados en la disco/tmp/
+
+# Lokale Lehrkraft- und Quelldateien für Cuatro en raya.
+/spanisch/q1/4-gewinnt/lehrkraft.html
+/spanisch/q1/4-gewinnt/teacher.js
+/spanisch/q1/4-gewinnt/Cuatro en rayas.docx
+/spanisch/q1/4-gewinnt/assets/*.png
+/spanisch/q1/4-gewinnt/assets/audio/*sample*
