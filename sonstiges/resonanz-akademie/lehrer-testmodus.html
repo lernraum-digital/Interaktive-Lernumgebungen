@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resonanz-Akademie – Lehrkräfte-Testmodus</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="bg-layer"></div>
+
+<div id="test-bar" class="hidden">
+  <span class="test-bar-label">🔧 Lehrkräfte-Testmodus</span>
+  <label for="test-jump">Springe zu:</label>
+  <select id="test-jump"></select>
+  <span class="test-bar-hint">Fortschritt bis dahin gilt automatisch als erledigt.</span>
+</div>
+
+<header id="hud" class="hidden">
+  <div class="hud-left">
+    <img id="hud-emblem" class="hud-emblem hidden" alt="Euer Wappen">
+    <span class="hud-label">Resonanz-Akademie</span>
+  </div>
+  <div class="hud-center">
+    <div id="timer-wrap">
+      <span class="hud-label">Zeit</span>
+      <span id="timer">68:00</span>
+      <span id="timer-paused-note" class="hidden">— pausiert für Reflexion</span>
+    </div>
+  </div>
+  <div class="hud-right">
+    <span class="hud-label">Kristalle</span>
+    <div id="crystal-tracker"></div>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- START SCREEN -->
+  <section id="screen-start" class="screen active">
+    <div class="panel narrow">
+      <div class="mentor-row">
+        <img src="assets/kael.png" alt="Kael, Hüter des Observatoriums" class="mentor-avatar large">
+        <div>
+          <h1>Resonanz-Akademie</h1>
+          <p class="subtitle">Der Weg deiner Stärken</p>
+        </div>
+      </div>
+      <p class="story">
+        Willkommen an der Akademie. Jede Schülerin, jeder Schüler trägt einen eigenen
+        Resonanzkristall – doch eurer ist noch dunkel. Kael, Hüter des Observatoriums,
+        braucht eure Hilfe: Die Aufzeichnungen der Schülerin <strong>Nima</strong> sind
+        durcheinandergeraten. Nur wenn ihr ihre Spuren ordnet, erwacht auch euer eigener
+        Kristall.
+      </p>
+
+      <div class="field">
+        <label for="team-name">Teamname</label>
+        <input type="text" id="team-name" placeholder="z. B. Sternenreiter">
+      </div>
+      <div class="field">
+        <label for="player-names">Namen im Team</label>
+        <input type="text" id="player-names" placeholder="z. B. Alex, Sam, Lu">
+      </div>
+
+      <div class="field">
+        <label>Wählt euer Wappen</label>
+        <div class="emblem-picker">
+          <button type="button" class="emblem-choice" data-emblem="c">
+            <img src="assets/emblem-c.jpg" alt="Wappen der Weisheit">
+            <span>Pfad der Weisheit</span>
+          </button>
+          <button type="button" class="emblem-choice" data-emblem="s">
+            <img src="assets/emblem-s.png" alt="Wappen des Mutes">
+            <span>Pfad des Mutes</span>
+          </button>
+        </div>
+      </div>
+
+      <button id="btn-start" class="btn-primary">Mission beginnen</button>
+      <p class="hint-small">Der Fortschritt wird nur in diesem Browser gespeichert.</p>
+    </div>
+  </section>
+
+  <!-- MODULE SCREEN (template, filled dynamically) -->
+  <section id="screen-module" class="screen">
+    <div class="panel wide">
+      <div class="module-progress">
+        <div id="module-progress-bar" class="progress-bar"><div class="progress-fill"></div></div>
+      </div>
+
+      <div id="phase-puzzle" class="phase">
+        <div class="mentor-row">
+          <img src="assets/kael.png" alt="Kael" class="mentor-avatar">
+          <div class="mentor-bubble">
+            <h2 id="puzzle-title"></h2>
+            <p id="puzzle-story" class="story"></p>
+          </div>
+        </div>
+
+        <p id="puzzle-task" class="task"></p>
+
+        <div id="puzzle-content"></div>
+
+        <div class="code-entry">
+          <label for="code-input">Lösungscode (4-stellig)</label>
+          <input type="text" id="code-input" maxlength="4" inputmode="numeric" placeholder="XXXX">
+          <button id="btn-submit-code" class="btn-primary">Code eingeben</button>
+        </div>
+        <p id="code-feedback" class="feedback"></p>
+
+        <div class="hint-area">
+          <button id="btn-hint" class="btn-secondary">Tipp anfordern (kostet Punkte)</button>
+          <div id="hint-list"></div>
+        </div>
+
+        <button id="btn-test-autosolve" type="button" class="btn-secondary test-only hidden">✅ Code automatisch lösen (Testmodus)</button>
+      </div>
+
+      <div id="phase-reward" class="phase hidden">
+        <div class="crystal-reveal">
+          <div class="crystal-stage">
+            <img src="assets/kristalle.png" alt="" class="crystal-backdrop">
+            <div id="crystal-icon" class="crystal-icon"></div>
+          </div>
+          <h2 id="reward-title"></h2>
+          <p id="reward-text"></p>
+          <div class="mentor-row kael-comment-row">
+            <img src="assets/kael.png" alt="Kael" class="mentor-avatar small">
+            <p id="kael-comment" class="story"></p>
+          </div>
+        </div>
+        <button id="btn-to-reflection" class="btn-primary">Weiter</button>
+      </div>
+
+      <div id="phase-reflection" class="phase hidden">
+        <div class="reflection-badge">⏸ Zeit angehalten – nehmt euch einen Moment</div>
+        <h2>Und was hat das mit euch zu tun?</h2>
+        <p id="reflection-question" class="reflection-question"></p>
+        <p class="reflection-safety">
+          Besprecht die Frage kurz in eurer Gruppe. Es gibt keine Musterantwort und keine
+          Bewertung. Niemand muss etwas Persönliches erzählen – andere dürfen ergänzen.
+        </p>
+        <button id="btn-continue" class="btn-primary">Wir haben besprochen – weiter</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL SCREEN -->
+  <section id="screen-final" class="screen">
+    <div class="panel narrow center">
+      <img id="final-emblem" class="final-emblem" alt="Euer Wappen">
+      <h1>Euer Wappen ist vollständig</h1>
+      <p class="story">Ihr habt alle Kristalle gesammelt und Nima geholfen, ihren Weg wiederzufinden – und dabei auch etwas über euren eigenen erfahren.</p>
+      <div id="final-crystals" class="crystal-tracker-final"></div>
+      <p class="hint-small">Zeit: <span id="final-time"></span></p>
+    </div>
+  </section>
+
+</main>
+
+<script>window.__forceTestMode = true;</script>
+<script src="game.js"></script>
+</body>
+</html>
