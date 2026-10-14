@@ -193,7 +193,7 @@ function readSettings(){const next=structuredClone(scenario),elements=$('setting
 function apply(){setup(readSettings());}
 function safe(action){try{action();}catch(e){notice(e.message);}}
 $('settings').onsubmit=e=>{e.preventDefault();safe(apply);};
-const storageKey='bubble-match-scenarios-v1';function saved(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}function refreshSaved(){safe(()=>{const list=$('saved');list.replaceChildren();for(const name of Object.keys(saved()))list.add(new Option(name,name));});}
+const storageKey='bubble-match-scenarios-v1';function saved(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}function refreshSaved(){safe(()=>{const list=$('saved');list.replaceChildren();for(const name of Object.keys(saved()))list.add(new Option(name,name));if([...list.options].some(option=>option.value===scenario.name))list.value=scenario.name;});}
 $('save').onclick=()=>safe(()=>{apply();const all=saved();all[scenario.name]=structuredClone(scenario);localStorage.setItem(storageKey,JSON.stringify(all));refreshSaved();notice('Szenario in diesem Browser gespeichert.');});
 $('load').onclick=()=>safe(()=>{const s=saved()[$('saved').value];if(!s)throw Error('Bitte zuerst ein Szenario speichern oder JSON laden.');setup(s);populate();});
 $('duplicate').onclick=()=>safe(()=>{apply();scenario.name+=' · Kopie';populate();notice('Kopie angelegt. Vergib einen neuen Namen und speichere sie.');});
