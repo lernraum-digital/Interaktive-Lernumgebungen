@@ -5,6 +5,10 @@ export function validate(raw) {
   if(s.hudTransparent===undefined)s.hudTransparent=false;
   if(s.hudBackground===undefined)s.hudBackground='#142d2b';
   if(s.hudText===undefined)s.hudText='#f6edda';
+  if(s.timerColor===undefined)s.timerColor=s.hudText;
+  if(s.timerWarningColor===undefined)s.timerWarningColor='#e8a542';
+  if(s.timerUrgentColor===undefined)s.timerUrgentColor='#eb6674';
+  for(const key of ['timerColor','timerWarningColor','timerUrgentColor'])if(!/^#[0-9a-f]{6}$/i.test(s[key]))throw Error('Bitte gültige Farben für den Timer-Ring wählen.');
   if(typeof s.showProgress!=='boolean'||typeof s.hudTransparent!=='boolean')throw Error('Ungültige Einstellung für die Spielanzeigen.');
   if(!/^#[0-9a-f]{6}$/i.test(s.hudBackground)||!/^#[0-9a-f]{6}$/i.test(s.hudText))throw Error('Bitte gültige Farben für die Spielanzeigen wählen.');
   if(typeof s.transparent!=='boolean')throw Error('Ungültige Einstellung: transparenter Hintergrund.');

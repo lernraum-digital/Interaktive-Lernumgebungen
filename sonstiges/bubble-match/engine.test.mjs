@@ -51,3 +51,5 @@ for(const layout of ['corners','bottom','sides'])for(const size of [64,108,150])
   console.log(`PASS full field ${layout}, ${size}px, ${w}×${h}: 5 simulated minutes, category flyovers, max stall ${maxStall}, max overlap ${(maxOverlap*100).toFixed(0)}%`);
 }
 const oldMovement=structuredClone(s);delete oldMovement.movementArea;assert.equal(validate(oldMovement).movementArea,'clear');assert.throws(()=>validate({...s,movementArea:'bad'}));
+
+const clockColours=validate({...s,timerColor:'#2255cc',timerWarningColor:'#ccee11',timerUrgentColor:'#cc1155'});assert.equal(clockColours.timerColor,'#2255cc');assert.equal(validate(JSON.parse(JSON.stringify(clockColours))).timerUrgentColor,'#cc1155');assert.equal(validate({...s,timerColor:undefined,hudText:'#123456'}).timerColor,'#123456');for(const key of ['timerColor','timerWarningColor','timerUrgentColor'])assert.throws(()=>validate({...s,[key]:'invalid'}));console.log('PASS timer ring colours: custom colours, snapshot roundtrip, legacy fallback and invalid input');
