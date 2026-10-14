@@ -2,7 +2,7 @@ import {Game,validate,fitText} from './engine.mjs';
 import fs from 'node:fs';import assert from 'node:assert/strict';
 const s=JSON.parse(fs.readFileSync(new URL('./scenarios/knotberg.json',import.meta.url)));let seed=72;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/2**32;};
 for(const layout of ['corners','bottom','sides'])for(const size of [64,108,150])for(const [w,h] of [[1000,760],[600,1000]]){
- const g=new Game({...s,layout,size},w,h,random);g.start();let moved=0,maxOverlap=0;for(let i=0;i<18000;i++){const old=g.bubbles.map(b=>[b.x,b.y]);g.step(1/60);g.bubbles.forEach((b,j)=>{assert(Number.isFinite(b.x+b.y));assert(b.x>=g.arena.x+b.r-1&&b.x<=g.arena.x+g.arena.w-b.r+1);assert(b.y>=g.arena.y+b.r-1&&b.y<=g.arena.y+g.arena.h-b.r+1);if(Math.hypot(b.x-old[j][0],b.y-old[j][1])>.001)moved++;});for(let j=0;j<g.bubbles.length;j++)for(let k=j+1;k<g.bubbles.length;k++){const b=g.bubbles[j],c=g.bubbles[k];maxOverlap=Math.max(maxOverlap,b.r+c.r-Math.hypot(b.x-c.x,b.y-c.y));}}assert(moved>17000);assert.equal(g.count,0);assert(maxOverlap<3,`overlap ${maxOverlap}`);
+ const g=new Game({...s,layout,size,movementArea:'clear'},w,h,random);g.start();let moved=0,maxOverlap=0;for(let i=0;i<18000;i++){const old=g.bubbles.map(b=>[b.x,b.y]);g.step(1/60);g.bubbles.forEach((b,j)=>{assert(Number.isFinite(b.x+b.y));assert(b.x>=g.arena.x+b.r-1&&b.x<=g.arena.x+g.arena.w-b.r+1);assert(b.y>=g.arena.y+b.r-1&&b.y<=g.arena.y+g.arena.h-b.r+1);if(Math.hypot(b.x-old[j][0],b.y-old[j][1])>.001)moved++;});for(let j=0;j<g.bubbles.length;j++)for(let k=j+1;k<g.bubbles.length;k++){const b=g.bubbles[j],c=g.bubbles[k];maxOverlap=Math.max(maxOverlap,b.r+c.r-Math.hypot(b.x-c.x,b.y-c.y));}}assert(moved>17000);assert.equal(g.count,0);assert(maxOverlap<3,`overlap ${maxOverlap}`);
  for(let i=0;i<3;i++)g.assign(g.bubbles[0],(g.bubbles[0].category+1)%4);assert.equal(g.phase,'lost');g.reset();assert.equal(g.lives,3);assert.equal(g.count,0);g.start();let guard=0;while(g.phase==='playing'&&guard++<1000){for(const b of g.bubbles)if(b.state==='floating')g.assign(b,b.category);g.step(.1);}assert.equal(g.phase,'won');assert.equal(g.count,12);g.reset();assert.equal(g.collected.flat().length,0);
  console.log(`PASS ${layout}, ${size}px, ${w}×${h}: 5 simulated minutes, boundaries, separation, loss, restart, win`);
 }
@@ -40,3 +40,14 @@ console.log('PASS start settings and compatibility, no-code mode, visible 0.8-se
 const oldHud=structuredClone(s);for(const key of ['showProgress','hudTransparent','hudBackground','hudText'])delete oldHud[key];assert.equal(validate(oldHud).showProgress,true);assert.equal(validate(oldHud).hudTransparent,false);assert.equal(validate(oldHud).hudBackground,'#142d2b');
 assert.equal(validate({...s,showProgress:false,hudTransparent:true}).showProgress,false);assert.throws(()=>validate({...s,hudTransparent:'true'}));assert.throws(()=>validate({...s,hudBackground:'blue'}));
 console.log('PASS display settings: old scenario compatibility, optional counter, transparent HUD and invalid colour rejection');
+for(const layout of ['corners','bottom','sides'])for(const size of [64,108,150])for(const [w,h] of [[1000,760],[600,layout==='bottom'?Math.max(210,size+48):300]]){
+  const g=new Game({...s,layout,size,movementArea:'full',speed:72},w,h,random);g.start();const stalled=new Map();let maxStall=0,maxOverlap=0,categoryContacts=0;
+  for(let frame=0;frame<18000;frame++){
+    const old=new Map(g.bubbles.map(b=>[b,{x:b.x,y:b.y}]));g.step(1/60);
+    for(const b of g.bubbles){assert(b.x>=g.arena.x+b.r-1&&b.x<=g.arena.x+g.arena.w-b.r+1);assert(b.y>=g.arena.y+b.r-1&&b.y<=g.arena.y+g.arena.h-b.r+1);const p=old.get(b);const stuck=p&&Math.hypot(b.x-p.x,b.y-p.y)<.001?(stalled.get(b)||0)+1:0;stalled.set(b,stuck);maxStall=Math.max(maxStall,stuck);if(g.targets.some(t=>b.x>=t.x&&b.x<=t.x+t.w&&b.y>=t.y&&b.y<=t.y+t.h))categoryContacts++;}
+    for(let i=0;i<g.bubbles.length;i++)for(let j=i+1;j<g.bubbles.length;j++){const a=g.bubbles[i],b=g.bubbles[j];maxOverlap=Math.max(maxOverlap,(a.r+b.r-Math.hypot(a.x-b.x,a.y-b.y))/(a.r+b.r));}
+  }
+  assert.equal(g.count,0);assert.equal(g.lives,3);assert(categoryContacts>0);assert(maxStall<60,`stalled ${maxStall} frames`);assert(maxOverlap<.4,`deep overlap ${maxOverlap}`);
+  console.log(`PASS full field ${layout}, ${size}px, ${w}×${h}: 5 simulated minutes, category flyovers, max stall ${maxStall}, max overlap ${(maxOverlap*100).toFixed(0)}%`);
+}
+const oldMovement=structuredClone(s);delete oldMovement.movementArea;assert.equal(validate(oldMovement).movementArea,'clear');assert.throws(()=>validate({...s,movementArea:'bad'}));

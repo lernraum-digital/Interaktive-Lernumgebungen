@@ -11,6 +11,8 @@ export function validate(raw) {
   if (s.version !== 1 || !Array.isArray(s.categories) || s.categories.length < 2 || s.categories.length > 4) throw Error('Bitte zwei bis vier Kategorien und Szenario-Version 1 verwenden.');
   if(s.codeMode===undefined)s.codeMode='final';
   if(!['final','categories','none'].includes(s.codeMode))throw Error('Bitte einen gültigen Code-Modus wählen.');
+  if(s.movementArea===undefined)s.movementArea='clear';
+  if(!['full','clear'].includes(s.movementArea))throw Error('Bitte eine gültige Bewegungsfläche wählen.');
   if(s.startMode===undefined)s.startMode='button';
   if(s.startLabel===undefined)s.startLabel='Runde starten';
   if(!['button','auto','overlay'].includes(s.startMode))throw Error('Bitte eine gültige Startart wählen.');
@@ -29,7 +31,7 @@ export function validate(raw) {
   if(n>40)throw Error('Der Prototyp unterstützt bis zu 40 Wörter; es erscheinen höchstens sechs gleichzeitig.');
   return s;
 }
-export function geometry(w,h,layout,count=4) {
+export function geometry(w,h,layout,count=4,movementArea='clear') {
   const pad=16,gap=12,ch=126;let targets,arena;
   if(layout==='bottom'){
     const cw=(w-pad*2-gap*(count-1))/count;
@@ -44,15 +46,17 @@ export function geometry(w,h,layout,count=4) {
       targets=[{x:pad,y:pad,w:side,h:ch},{x:w-side-pad,y:pad,w:side,h:ch},{x:pad,y:h-ch-pad,w:side,h:ch},{x:w-side-pad,y:h-ch-pad,w:side,h:ch}].slice(0,count);
       arena={x:pad,y:ch+pad*2,w:w-pad*2,h:h-(count>2?2*ch+pad*4:ch+pad*3)};
     }
-  }return {targets,arena};
+  }if(movementArea==='full')arena={x:8,y:8,w:w-16,h:h-16};return {targets,arena};
 }
 export class Game {
   constructor(s,w=1000,h=760,random=Math.random){this.s=validate(s);this.random=random;this.w=w;this.h=h;this.reset();}
-  reset(){Object.assign(this,geometry(this.w,this.h,this.s.layout,this.s.categories.length));this.phase='ready';this.lives=this.s.lives;this.remaining=this.s.timer;this.count=0;this.time=0;this.bubbles=[];this.collected=this.s.categories.map(()=>[]);this.queue=this.s.categories.flatMap((c,category)=>c.words.map(word=>({word,category})));for(let i=this.queue.length-1;i>0;i--){let j=Math.floor(this.random()*(i+1));[this.queue[i],this.queue[j]]=[this.queue[j],this.queue[i]];}this.total=this.queue.length;this.spawn();}
+  reset(){Object.assign(this,geometry(this.w,this.h,this.s.layout,this.s.categories.length,this.s.movementArea));this.phase='ready';this.lives=this.s.lives;this.remaining=this.s.timer;this.count=0;this.time=0;this.bubbles=[];this.collected=this.s.categories.map(()=>[]);this.queue=this.s.categories.flatMap((c,category)=>c.words.map(word=>({word,category})));for(let i=this.queue.length-1;i>0;i--){let j=Math.floor(this.random()*(i+1));[this.queue[i],this.queue[j]]=[this.queue[j],this.queue[i]];}this.total=this.queue.length;this.spawn();}
   resize(w,h){
-    const old=this.arena;this.w=w;this.h=h;Object.assign(this,geometry(w,h,this.s.layout,this.s.categories.length));
+    const old=this.arena;this.w=w;this.h=h;Object.assign(this,geometry(w,h,this.s.layout,this.s.categories.length,this.s.movementArea));
     const a=this.arena,r=this.s.size/2+4,cols=Math.floor(a.w/(r*2+8)),rows=Math.floor(a.h/(r*2+8)),cap=Math.min(6,cols*rows);
     if(cap<1)throw Error('Spielfeld zu klein für diese Kugelgröße.');
+    const positions=[];for(let row=0;row<rows;row++)for(let col=0;col<cols;col++)positions.push({x:a.x+r+8+col*(r*2+8),y:a.y+r+8+row*(r*2+8)});
+    if(this.s.movementArea==='full')for(let i=positions.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[positions[i],positions[j]]=[positions[j],positions[i]];}
     let placed=0;this.bubbles=this.bubbles.filter(b=>{
       if(b.state==='gliding'){
         b.from={x:a.x+(b.from.x-old.x)*a.w/old.w,y:a.y+(b.from.y-old.y)*a.h/old.h};
@@ -60,13 +64,15 @@ export class Game {
         b.x=b.from.x+(target.x+target.w/2-b.from.x)*e;b.y=b.from.y+(target.y+target.h/2-b.from.y)*e;return true;
       }
       if(placed>=cap){this.queue.push({word:b.word,category:b.category});return false;}
-      b.x=a.x+r+8+(placed%cols)*(r*2+8);b.y=a.y+r+8+Math.floor(placed/cols)*(r*2+8);placed++;return true;
+      b.x=positions[placed].x;b.y=positions[placed].y;placed++;return true;
     });this.spawn();
   }
   start(){if(this.phase==='ready')this.phase='playing';}
-  spawn(){const r=this.s.size/2+4,a=this.arena;const cols=Math.floor(a.w/(r*2+8)),rows=Math.floor(a.h/(r*2+8));const cap=Math.min(6,cols*rows);
+  spawn(){const r=this.s.size/2+4,a=this.arena,spacing=r*2+8,cols=Math.floor(a.w/spacing),rows=Math.floor(a.h/spacing),cap=Math.min(6,cols*rows);
     if(cap<1)throw Error('Spielfeld zu klein für diese Kugelgröße.');
-    for(let y=0;y<rows&&this.queue.length&&this.bubbles.length<cap;y++)for(let x=0;x<cols&&this.queue.length&&this.bubbles.length<cap;x++){let px=a.x+r+8+x*(r*2+8),py=a.y+r+8+y*(r*2+8);if(this.bubbles.some(b=>Math.hypot(px-b.x,py-b.y)<r*2+4))continue;let angle=this.random()*Math.PI*2;this.bubbles.push({...this.queue.pop(),x:px,y:py,dx:Math.cos(angle),dy:Math.sin(angle),state:'floating',r:r-4});}
+    const cells=[];for(let row=0;row<rows;row++)for(let col=0;col<cols;col++)cells.push({x:a.x+(a.w-cols*spacing)/2+(col+.5)*spacing,y:a.y+(a.h-rows*spacing)/2+(row+.5)*spacing});
+    for(let i=cells.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[cells[i],cells[j]]=[cells[j],cells[i]];}
+    for(const p of cells){if(!this.queue.length||this.bubbles.length>=cap)break;if(this.bubbles.some(b=>Math.hypot(p.x-b.x,p.y-b.y)<r*2+4))continue;const angle=this.random()*Math.PI*2;this.bubbles.push({...this.queue.pop(),x:p.x,y:p.y,dx:Math.cos(angle),dy:Math.sin(angle),state:'floating',r:r-4});}
   }
   assign(b,target){if(this.phase!=='playing'||b.state!=='floating')return null;
     if(b.category!==target){this.lives--;if(!this.lives)this.finish('lost');return false;}
@@ -83,7 +89,7 @@ export class Game {
       if(b.x<a.x+b.r+4){b.x=a.x+b.r+4;b.dx=Math.abs(b.dx);}if(b.x>a.x+a.w-b.r-4){b.x=a.x+a.w-b.r-4;b.dx=-Math.abs(b.dx);}if(b.y<a.y+b.r+4){b.y=a.y+b.r+4;b.dy=Math.abs(b.dy);}if(b.y>a.y+a.h-b.r-4){b.y=a.y+a.h-b.r-4;b.dy=-Math.abs(b.dy);}
     }
     const free=this.bubbles.filter(b=>b.state==='floating');
-    for(let i=0;i<free.length;i++)for(let j=i+1;j<free.length;j++){const b=free[i],c=free[j];let dx=c.x-b.x,dy=c.y-b.y,d=Math.hypot(dx,dy),min=b.r+c.r+8;if(d<min){let nx=d?dx/d:1,ny=d?dy/d:0,over=(min-d)/2;if(b!==held){b.x-=nx*over;b.y-=ny*over;}if(c!==held){c.x+=nx*over;c.y+=ny*over;}let dot=(c.dx-b.dx)*nx+(c.dy-b.dy)*ny;if(dot<0){b.dx-=(-dot)*nx;b.dy-=(-dot)*ny;c.dx+=(-dot)*nx;c.dy+=(-dot)*ny;}for(const v of [b,c]){let norm=Math.hypot(v.dx,v.dy)||1;v.dx/=norm;v.dy/=norm;v.x=Math.max(a.x+v.r+4,Math.min(a.x+a.w-v.r-4,v.x));v.y=Math.max(a.y+v.r+4,Math.min(a.y+a.h-v.r-4,v.y));}}}
+    for(let i=0;i<free.length;i++)for(let j=i+1;j<free.length;j++){const b=free[i],c=free[j];let dx=c.x-b.x,dy=c.y-b.y,d=Math.hypot(dx,dy),min=this.s.movementArea==='full'?(b.r+c.r)*.82:b.r+c.r+8;if(d<min){let nx=d?dx/d:1,ny=d?dy/d:0,over=(min-d)/2;if(b!==held){b.x-=nx*over;b.y-=ny*over;}if(c!==held){c.x+=nx*over;c.y+=ny*over;}let dot=(c.dx-b.dx)*nx+(c.dy-b.dy)*ny;if(dot<0){b.dx-=(-dot)*nx;b.dy-=(-dot)*ny;c.dx+=(-dot)*nx;c.dy+=(-dot)*ny;}for(const v of [b,c]){let norm=Math.hypot(v.dx,v.dy)||1;v.dx/=norm;v.dy/=norm;v.x=Math.max(a.x+v.r+4,Math.min(a.x+a.w-v.r-4,v.x));v.y=Math.max(a.y+v.r+4,Math.min(a.y+a.h-v.r-4,v.y));}}}
     this.bubbles=this.bubbles.filter(b=>b.state!=='done');this.spawn();if(this.count===this.total)this.finish('won');
   }
 }

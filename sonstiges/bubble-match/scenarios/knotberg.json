@@ -16,7 +16,7 @@
   "glow": true,
   "background": "#142d2b",
   "transparent": false,
-  "speed": 45,
+  "speed": 72,
   "lives": 3,
   "timer": 0,
   "collected": true,
@@ -76,5 +76,6 @@
   "showProgress": true,
   "hudTransparent": true,
   "hudBackground": "#142d2b",
-  "hudText": "#f6edda"
+  "hudText": "#f6edda",
+  "movementArea": "full"
 }
