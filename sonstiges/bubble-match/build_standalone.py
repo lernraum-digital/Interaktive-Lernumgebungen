@@ -17,7 +17,7 @@ page = re.sub(r'<link rel="stylesheet" href="style.css">|<style id="bubble-style
 workshop = page.replace('<body>', '<body data-workshop="true">')
 (folder / 'werkstatt.html').write_text(workshop)
 test_scenario = json.loads((folder / 'scenarios/knotberg.json').read_text())
-test_scenario.update(transparent=True, layout='bottom', startMode='overlay')
+test_scenario.update(transparent=True, layout='bottom', startMode='overlay', hudTransparent=True, hudText='#302a21')
 test_json = json.dumps(test_scenario, ensure_ascii=False).replace('</', '<\\/')
 test_app = app_source.replace("await(await fetch('./scenarios/knotberg.json')).json()", test_json)
 test_runtime = '<script id="bubble-runtime">\n(() => {\n' + engine + '\n' + test_app + '\n})();\n</script>'

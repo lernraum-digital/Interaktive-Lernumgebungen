@@ -1,4 +1,4 @@
-# Bubble Match · Knotberg — lokaler Prototyp
+# Bubble Match · Knotbert — lokaler Prototyp
 
 Eigenständiges Spiel ohne Genially-SDK, externe Schriftserver, Tracking oder Schülerdaten. Bestehende Seiten werden nicht verändert. Für den ersten öffentlichen GitHub-Pages-/Genially-Test vorbereitet.
 
@@ -84,7 +84,7 @@ Der konkrete Ablauf:
 
 1. `werkstatt.html` öffnen, gespeicherte Variante laden oder Einstellungen vornehmen.
 2. „Im Browser speichern“ für spätere Bearbeitung, beziehungsweise „Szenario als Datei speichern“ für eine übertragbare Sicherung.
-3. „Spieladresse und iFrame-Code erzeugen“ klicken. Die erzeugte Spieladresse enthält einen festen Stand sämtlicher Einstellungen, einschließlich Farben und Codezeichen.
+3. „iFrame-Code erzeugen“ klicken. Die erzeugte Spieladresse enthält einen festen Stand sämtlicher Einstellungen, einschließlich Farben und Codezeichen.
 4. „Übernehmen und schließen“ zeigt dasselbe Spiel mit diesen Einstellungen als Vorschau. Dadurch werden weder `index.html` auf der Festplatte noch eine GitHub-Seite überschrieben.
 5. Für eine spätere Einbettung den erzeugten Code mit einer öffentlich erreichbaren Spieladresse verwenden. `file://` und lokale Vorschau-Adressen sind in Genially nicht erreichbar; Veröffentlichung bleibt ein gesonderter späterer Schritt.
 
@@ -101,3 +101,13 @@ Leben stehen in einer eigenen Anzeige links. Verbrauchte Herzen werden grau, dam
 Browsergeprüft: Play-Start und frei gewählte Beschriftung, verschwommener Wartezustand, laufende Runde ohne sichtbaren Neustartknopf, drei Fehlzuordnungen, graue verbrauchte Herzen, Niederlage mit Neustart, vollständiger Reset, Auto-Start sowohl nach Schließen der Werkstatt als auch über einen neu geöffneten Spiel-Link, Sieg mit frei formulierter Meldung ohne Code, Zeitablauf und Neustart im automatisch startenden lokalen iFrame. Die großen Codeplätze bleiben im 390-Pixel-Rahmen innerhalb der Seitenbreite. Automatisiert zusätzlich geprüft: neue Startoptionen und Kompatibilität alter Szenarien, Abschluss ohne Code und messbare Zwischenposition der Gleitbewegung vor der Sammlung. Die bisherigen Bewegungs-, Layout-, Code- und Resetprüfungen bestehen weiterhin.
 
 Offen bleibt das Verhalten beim echten Genially-Seitenwechsel: Ein Player kann eingebettete Frames bereits vor dem sichtbaren Wechsel laden oder später wiederverwenden. Der Auto-Start ist an das Laden bzw. die Browser-Sichtbarkeit der eigenständigen Spielansicht gebunden; Genially-spezifische Auslösung wird bei der späteren Einbettung geprüft. Reales iPad-Touch ist ebenfalls noch offen.
+
+## Kopieren und Anzeigen
+
+Das Ausgabefeld enthält ausschließlich den vollständigen iFrame-Code. „iFrame-Code kopieren“ kopiert genau diesen Inhalt über die Browser-Zwischenablage. Falls diese nicht verfügbar ist, wird klassisches Kopieren versucht; andernfalls wird der Code zum manuellen Kopieren markiert und ein Hinweis angezeigt. Es wird keine zusätzliche Spieladresse vorangestellt.
+
+Die Herzen sind mittig, ohne sichtbares Wort „Leben“, Rahmen oder Hintergrund. Der Zuordnungszähler ist mit „Zuordnungszähler anzeigen“ optional; ein aktivierter Timer bleibt separat sichtbar. „Hintergrund der Spielanzeigen transparent“, „Hintergrundfarbe der Spielanzeigen“ und „Textfarbe der Spielanzeigen“ gelten für Zähler, Timer und Codebereich unabhängig vom Spielfeld. Bei transparentem Anzeigenhintergrund bleiben auch aufgedeckte Codefelder transparent. Die Bereiche neben den Herzen lassen Platz für einen in Genially darübergelegten Schloss-Button. Ein solcher Genially-Button wird nicht vom Spiel erzeugt.
+
+Bestehende Szenarien ohne neue Anzeigefelder werden mit dem bisherigen Zähler und dunklem Anzeigenhintergrund geladen. Bereits gespeicherte eigene Szenarionamen werden nicht automatisch umbenannt; das neue Beispielszenario heißt „Knotbert“.
+
+Zusätzlich geprüft: Das Ausgabefeld beginnt mit `<iframe` und endet mit `</iframe>`, der Kopierbutton wird nach Erzeugen aktiviert und die Browser-Zwischenablage-API meldet erfolgreiches Schreiben. Die endgültige Einfügeprobe im Prüf-Browser war wegen dessen separater virtueller Zwischenablage nicht möglich und bleibt als kurzer Nutzertest offen. Herzen sind auf 1406px und im 390px-iFrame exakt mittig. Transparente und frei gefärbte Anzeigen wurden über tatsächliche CSS-Werte geprüft; der Zähler lässt sich verbergen, während ein aktivierter Timer sichtbar bleibt. Die bisherigen Mechanikprüfungen bestehen.

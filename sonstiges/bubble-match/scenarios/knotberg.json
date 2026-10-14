@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "name": "Knotberg · Beispielrunde",
+  "name": "Knotbert · Beispielrunde",
   "intro": "Beispielinhalte: Verbinde jede Wortkugel mit der passenden Märchenwelt.",
   "code": "WALD-42",
   "success": "Gut gemacht, du hast alle Wörter richtig zugeordnet!",
@@ -72,5 +72,9 @@
   ],
   "codeMode": "categories",
   "startMode": "button",
-  "startLabel": "Runde starten"
+  "startLabel": "Runde starten",
+  "showProgress": true,
+  "hudTransparent": true,
+  "hudBackground": "#142d2b",
+  "hudText": "#f6edda"
 }

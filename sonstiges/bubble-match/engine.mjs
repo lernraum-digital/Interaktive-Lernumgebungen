@@ -1,6 +1,12 @@
 export function validate(raw) {
   const s = structuredClone(raw);
   if(s.transparent===undefined)s.transparent=false;
+  if(s.showProgress===undefined)s.showProgress=true;
+  if(s.hudTransparent===undefined)s.hudTransparent=false;
+  if(s.hudBackground===undefined)s.hudBackground='#142d2b';
+  if(s.hudText===undefined)s.hudText='#f6edda';
+  if(typeof s.showProgress!=='boolean'||typeof s.hudTransparent!=='boolean')throw Error('Ungültige Einstellung für die Spielanzeigen.');
+  if(!/^#[0-9a-f]{6}$/i.test(s.hudBackground)||!/^#[0-9a-f]{6}$/i.test(s.hudText))throw Error('Bitte gültige Farben für die Spielanzeigen wählen.');
   if(typeof s.transparent!=='boolean')throw Error('Ungültige Einstellung: transparenter Hintergrund.');
   if (s.version !== 1 || !Array.isArray(s.categories) || s.categories.length < 2 || s.categories.length > 4) throw Error('Bitte zwei bis vier Kategorien und Szenario-Version 1 verwenden.');
   if(s.codeMode===undefined)s.codeMode='final';
