@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Bubble Match · Knotberg</title><style id="bubble-style">
+:root{color-scheme:dark;font-family:Arial,sans-serif;background:#0d211f;color:#f6edda}*{box-sizing:border-box}body{margin:0}.shell{max-width:1120px;margin:auto;padding:22px}header{display:flex;align-items:center;justify-content:space-between;gap:20px}.eyebrow{letter-spacing:.2em;font-size:11px;color:#c8ad7e}h1{font:clamp(26px,4vw,42px) Georgia,serif;margin:4px 0 12px}a{color:#e4c68d}button,.file,select{background:#e4c68d;color:#172725;border:1px solid #e4c68d;border-radius:8px;padding:10px 14px;font:inherit;cursor:pointer}button:disabled{opacity:.5;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #fff;outline-offset:3px}.toolbar,.save-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}#stats{margin-left:auto;font-variant-numeric:tabular-nums}.hint,footer{font-size:13px;color:#cecfbc}.board{position:relative;border:1px solid #758879;border-radius:18px;overflow:hidden}canvas{display:block;width:100%;touch-action:none}.result{position:absolute;inset:0;background:#102522ec;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px}.result[hidden]{display:none}#code{font-size:32px;color:#edcc8d;letter-spacing:.15em;margin:10px 0 25px}#notice{min-height:20px;color:#efd197}.keyboard button{margin:4px}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:14px}.category-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0}fieldset{border:1px solid #62776c;border-radius:10px;padding:15px}label{display:flex;flex-direction:column;gap:6px;font-size:14px;margin-bottom:10px}input,textarea,select{width:100%;font:inherit;border:1px solid #7f8d77;border-radius:5px;padding:8px;background:#1b3632;color:#fff}input[type=color]{height:38px;padding:2px}input[type=checkbox]{width:22px;height:22px}textarea{resize:vertical}.save-actions select{width:210px}.file{margin:0}.file input{max-width:190px;font-size:12px}#editor{border-top:1px solid #748578;margin-top:24px;padding-top:15px}footer{padding-top:20px}body.embed .shell{padding:10px}body.embed #edit-link,body.embed footer{display:none}@media(max-width:560px){.shell{padding:10px}.toolbar{gap:6px}button{padding:9px}#stats{width:100%;margin:0}header{display:block}.hint{font-size:12px}}
+/* Dedicated workshop and frame-filling play view. */
+header[hidden]{display:none}body.edit-view{background:#0d211f}.edit-view header{position:sticky;top:0;z-index:3;background:#0d211ff5;padding:10px 0}.edit-view .board{display:grid;place-items:center;min-height:360px}.edit-view #editor-notice{color:#efd197;min-height:1.2em}.edit-view #close-editor{flex-shrink:0}.play-view header,.play-view #intro,.play-view footer{display:none}.play-view .shell{max-width:none;width:100%;height:100vh;height:100dvh;padding:6px;display:flex;flex-direction:column;gap:6px;overflow:hidden}.play-view .toolbar{flex-shrink:0;gap:6px}.play-view .toolbar button{font-size:13px;padding:7px 10px}.play-view #start:disabled{display:none}.play-view #stats{font-size:13px;width:auto;margin-left:auto}.play-view .board{flex:1;min-height:0;display:grid;place-items:center;overflow:hidden}.play-view .hint,.play-view #notice{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.play-view .keyboard{flex-shrink:0;max-height:25vh;overflow:auto;font-size:12px}.play-view .keyboard summary{cursor:pointer}.transparent-game,.transparent-game body.play-view{background:transparent!important;color-scheme:normal}.transparent-game .board{border-color:transparent;border-radius:0}.play-view #stats,.play-view .keyboard summary{background:#142d2bea;color:#f6edda;border-radius:6px;padding:5px 8px}.play-view .result h2{font-size:clamp(20px,4vw,32px)}.play-view .result{padding:16px}.play-view #code{font-size:clamp(22px,5vw,32px)}@media(max-width:560px){.edit-view header{display:flex;align-items:center;gap:12px}.edit-view header h1{font-size:23px}.edit-view .eyebrow{font-size:9px}.edit-view #close-editor{font-size:12px;max-width:140px}.play-view .toolbar{flex-wrap:nowrap}.play-view #stats{white-space:nowrap;font-size:11px}.play-view .shell{gap:4px;padding:4px}}
+.transparent-game body.edit-view .board{background:repeating-conic-gradient(#263e39 0% 25%,#3b504a 0% 50%) 0 0/24px 24px}
+#category-cards{position:absolute;inset:0;pointer-events:none}.target-card{position:absolute;display:flex;flex-direction:column;border-style:solid;text-align:center;pointer-events:auto;overflow:hidden;box-sizing:border-box}.target-card h2{margin:0;white-space:pre-line;line-height:1.12;font-weight:normal;flex-shrink:0}.collected-words{padding:0;margin:0;list-style:none;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;line-height:1.15}.collected-words li{padding:0;overflow-wrap:normal;word-break:normal;hyphens:auto}.collected-count{margin:auto 0}.result{z-index:2}#code-box{display:flex;align-items:center;gap:8px;background:#142d2bea;color:#f6edda;padding:4px 8px;border-radius:7px;font-size:12px}#code-box[hidden]{display:none}#code-slots{display:flex;gap:4px}.code-slot{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:26px;padding:0 5px;border:1px solid #bfa16e;border-radius:4px;font-size:17px;font-variant-numeric:tabular-nums}.code-slot.revealed{background:#e4c68d;color:#172725}.play-view #code-box{margin-left:8px}#category-count{max-width:220px}@media(max-width:560px){.play-view .toolbar{flex-wrap:wrap}.play-view #code-box{margin-left:auto}}
+#lives{display:flex;align-items:center;gap:10px;flex-shrink:0;background:#142d2bf2;padding:5px 12px;border:1px solid #bb915055;border-radius:9px}.lives-label{font-size:12px;letter-spacing:.08em;color:#f6edda}#life-icons{display:flex;gap:6px;flex-wrap:wrap;max-width:350px;line-height:1}.life-alive{color:#f5949d;font-size:30px;text-shadow:0 0 10px #c94b6455}.life-lost{color:#72817c;font-size:30px;opacity:.48}.toolbar #lives{order:-1}.play-view #stats{margin-left:auto}.play-view #code-box{margin-left:8px}.code-slot{min-width:42px;height:44px;font-size:30px;border-width:2px}#code-slots{gap:6px}#code-box{padding:5px 10px}.start-screen{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#142d2b66;gap:16px}.start-screen[hidden]{display:none}#play-start{display:grid;place-items:center;width:100px;height:100px;padding:0;border-radius:50%;border:2px solid #f3dca9;box-shadow:0 6px 30px #0005;background:#e4c68d;color:#172725}#play-start:hover{background:#f3dca9}#play-start:active{transform:scale(.97)}#start-caption{margin:0;padding:8px 15px;max-width:90%;background:#142d2bf2;border-radius:8px;color:#f6edda;font-size:18px;text-align:center}.board.waiting canvas,.board.waiting #category-cards,.board.ended canvas,.board.ended #category-cards{filter:blur(5px);pointer-events:none}.result{background:#102522c9;z-index:4}.result #again{font-size:18px;padding:12px 24px}.result p{max-width:480px;line-height:1.5}.play-view #code{font-size:clamp(30px,7vw,48px)}.keyboard[hidden]{display:none}.toolbar #start[hidden],.toolbar #pause[hidden]{display:none}@media(max-width:560px){#lives{padding:5px 8px;gap:6px}.life-alive,.life-lost{font-size:26px}#life-icons{gap:4px;max-width:220px}.lives-label{font-size:10px}.code-slot{min-width:36px;height:38px;font-size:26px}.play-view #code-box{margin-left:auto}#play-start{width:86px;height:86px}#start-caption{font-size:16px}}
+
+</style></head>
+<body><main class="shell"><header><div><p class="eyebrow">MÄRCHENWERKSTATT · BUBBLE MATCH</p><h1 id="title">Knotberg</h1></div><button id="close-editor" type="button">Bearbeitung schließen</button></header><p id="intro"></p><div class="toolbar"><div id="lives" role="status" aria-label="Leben"><span class="lives-label">Leben</span><div id="life-icons"></div></div><button id="start">Runde starten</button><button id="pause">Pause</button><span id="stats" aria-live="polite"></span><div id="code-box" role="group" aria-label="Lösungscode" hidden><span>Code</span><div id="code-slots" aria-live="polite"></div></div></div><p class="hint">Ziehe vom Wort zum passenden Ziel. Oder tippe erst das Wort und dann das Ziel an.</p><div class="board"><canvas id="game" aria-label="Bewegliche Märchenwörter mit vier Zuordnungszielen"></canvas><div id="category-cards" aria-label="Kategorien und gesammelte Wörter"></div><div id="start-screen" class="start-screen" hidden><button id="play-start" type="button" aria-label="Spiel starten"><svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><path d="M17 9 L39 24 L17 39 Z" fill="currentColor"/></svg></button><p id="start-caption">Spiel starten</p></div><div id="result" class="result" hidden><h2 id="result-title"></h2><p id="result-message"></p><strong id="code"></strong><button id="again">Neu starten</button></div></div><p id="notice" role="status"></p><details id="keyboard-tools" class="keyboard"><summary>Zuordnung mit Tastatur / Wörterliste</summary><p>Wort auswählen und anschließend die passende Kategorie wählen.</p><div id="word-buttons"></div><div id="target-buttons"></div></details><section id="editor" hidden><h2>Deine Märchenwerkstatt</h2><p id="editor-notice" role="status"></p><p>Beispielszenario für Knotberg. Änderungen starten die Vorschau neu. <b>|</b> markiert mögliche Trennstellen, z. B. Leb|kuchen|haus.</p><form id="settings"><div id="general" class="fields"></div><label>Kategorienzahl<select id="category-count"><option value="2">2 Kategorien</option><option value="3">3 Kategorien</option><option value="4">4 Kategorien</option></select></label><div id="categories" class="category-fields"></div><button type="submit">Vorschau übernehmen</button> <button id="close-editor-bottom" type="button">Übernehmen und schließen</button></form><hr><p><b>Dein Ablauf:</b> Einstellen → bei Bedarf speichern → Spieladresse und iFrame-Code erzeugen. „Übernehmen und schließen“ zeigt deine aktuelle Spielvorschau; die separate Spieldatei wird dabei nicht überschrieben.</p><div class="save-actions"><button id="save">Im Browser speichern</button><select id="saved" aria-label="Gespeichertes Szenario"></select><button id="load">Laden</button><button id="duplicate">Als Kopie bearbeiten</button><button id="export">Szenario als Datei speichern</button><label class="file">Szenario-Datei öffnen <input id="import" type="file" accept="application/json,.json"></label><button id="link">Spieladresse und iFrame-Code erzeugen</button></div><p>Browser-Speicherung ist lokal und kann vom Browser gelöscht werden. JSON-Dateien sichern deine Varianten. Eine erzeugte Spieladresse enthält eine unabhängige Momentaufnahme.</p><textarea id="embed" readonly aria-label="Spieladresse und Einbettungscode" rows="5" placeholder="Hier erscheinen Spieladresse und iFrame-Code."></textarea></section><footer>Lokaler Prototyp · Beispielinhalte und Beispielcode · ohne Schülerdaten</footer></main><script id="bubble-runtime">
+(() => {
+function validate(raw) {
+  const s = structuredClone(raw);
+  if(s.transparent===undefined)s.transparent=false;
+  if(typeof s.transparent!=='boolean')throw Error('Ungültige Einstellung: transparenter Hintergrund.');
+  if (s.version !== 1 || !Array.isArray(s.categories) || s.categories.length < 2 || s.categories.length > 4) throw Error('Bitte zwei bis vier Kategorien und Szenario-Version 1 verwenden.');
+  if(s.codeMode===undefined)s.codeMode='final';
+  if(!['final','categories','none'].includes(s.codeMode))throw Error('Bitte einen gültigen Code-Modus wählen.');
+  if(s.startMode===undefined)s.startMode='button';
+  if(s.startLabel===undefined)s.startLabel='Runde starten';
+  if(!['button','auto','overlay'].includes(s.startMode))throw Error('Bitte eine gültige Startart wählen.');
+  if(typeof s.startLabel!=='string'||!s.startLabel.trim()||s.startLabel.length>80)throw Error('Bitte eine Startbutton-Beschriftung mit höchstens 80 Zeichen eingeben.');
+  s.categories.forEach((c,i)=>{if(c.codePart===undefined)c.codePart=String(i+1);if(typeof c.codePart!=='string'||!c.codePart.trim()||Array.from(c.codePart).length>4)throw Error('Je Kategorie bitte ein Codezeichen mit höchstens vier Zeichen eingeben.');});
+  const labels={size:'Kugelgröße',fontSize:'Kugelschriftgröße',categoryFontSize:'Kategorienschriftgröße',strokeWidth:'Rahmenstärke',speed:'Geschwindigkeit',lives:'Start-Leben',timer:'Timer'};
+  const limits={size:[64,150],fontSize:[12,36],categoryFontSize:[12,30],strokeWidth:[0,8],speed:[0,120],lives:[1,10],timer:[0,3600]};
+  for(const [k,[min,max]] of Object.entries(limits)) if(!Number.isFinite(s[k]) || s[k]<min || s[k]>max) throw Error(`${labels[k]} muss zwischen ${min} und ${max} liegen.`);
+  if(!['corners','bottom','sides'].includes(s.layout)) throw Error('Unbekannte Anordnung.');
+  if(!['Georgia','Arial','Verdana','Trebuchet MS'].includes(s.font)) throw Error('Bitte eine der angebotenen Schriftarten wählen.');
+  for(const key of ['name','intro','code','success']) if(typeof s[key]!=='string'||s[key].length>1000) throw Error(`Ungültiger Text: ${key}`);
+  for(const key of ['glow','collected']) if(typeof s[key]!=='boolean') throw Error(`Ungültige Einstellung: ${key}`);
+  for(const obj of [s,...s.categories]) for(const key of obj===s?['fill','stroke','text','background']:['background','border','text']) if(!/^#[0-9a-f]{6}$/i.test(obj[key])) throw Error('Farben bitte als sechsstellige Hex-Farbe angeben.');
+  let n=0;
+  s.categories.forEach(c=>{if(typeof c.name!=='string'||!c.name.trim()||c.name.length>80||!Array.isArray(c.words)||!c.words.length) throw Error('Jede Kategorie benötigt einen Namen und Wörter.'); c.words.forEach(w=>{if(typeof w!=='string'||!w.trim()||w.length>100||w.split('|').some(p=>!p.trim()))throw Error('Wörter dürfen nicht leer sein; | nur zwischen Wortteilen setzen.'); n++;});});
+  if(n>40)throw Error('Der Prototyp unterstützt bis zu 40 Wörter; es erscheinen höchstens sechs gleichzeitig.');
+  return s;
+}
+function geometry(w,h,layout,count=4) {
+  const pad=16,gap=12,ch=126;let targets,arena;
+  if(layout==='bottom'){
+    const cw=(w-pad*2-gap*(count-1))/count;
+    targets=Array.from({length:count},(_,i)=>({x:pad+i*(cw+gap),y:h-ch-pad,w:cw,h:ch}));arena={x:pad,y:pad,w:w-2*pad,h:h-ch-3*pad};
+  }else{
+    const side=Math.min(210,w*.24);
+    if(layout==='sides'){
+      const left=Math.ceil(count/2),right=Math.floor(count/2);
+      targets=Array.from({length:count},(_,i)=>{const isLeft=i%2===0,n=isLeft?left:right,row=Math.floor(i/2);return {x:isLeft?pad:w-side-pad,y:(row+1)*h/(n+1)-ch/2,w:side,h:ch};});
+      arena={x:side+pad*2,y:pad,w:w-2*side-pad*4,h:h-pad*2};
+    }else{
+      targets=[{x:pad,y:pad,w:side,h:ch},{x:w-side-pad,y:pad,w:side,h:ch},{x:pad,y:h-ch-pad,w:side,h:ch},{x:w-side-pad,y:h-ch-pad,w:side,h:ch}].slice(0,count);
+      arena={x:pad,y:ch+pad*2,w:w-pad*2,h:h-(count>2?2*ch+pad*4:ch+pad*3)};
+    }
+  }return {targets,arena};
+}
+class Game {
+  constructor(s,w=1000,h=760,random=Math.random){this.s=validate(s);this.random=random;this.w=w;this.h=h;this.reset();}
+  reset(){Object.assign(this,geometry(this.w,this.h,this.s.layout,this.s.categories.length));this.phase='ready';this.lives=this.s.lives;this.remaining=this.s.timer;this.count=0;this.time=0;this.bubbles=[];this.collected=this.s.categories.map(()=>[]);this.queue=this.s.categories.flatMap((c,category)=>c.words.map(word=>({word,category})));for(let i=this.queue.length-1;i>0;i--){let j=Math.floor(this.random()*(i+1));[this.queue[i],this.queue[j]]=[this.queue[j],this.queue[i]];}this.total=this.queue.length;this.spawn();}
+  resize(w,h){
+    const old=this.arena;this.w=w;this.h=h;Object.assign(this,geometry(w,h,this.s.layout,this.s.categories.length));
+    const a=this.arena,r=this.s.size/2+4,cols=Math.floor(a.w/(r*2+8)),rows=Math.floor(a.h/(r*2+8)),cap=Math.min(6,cols*rows);
+    if(cap<1)throw Error('Spielfeld zu klein für diese Kugelgröße.');
+    let placed=0;this.bubbles=this.bubbles.filter(b=>{
+      if(b.state==='gliding'){
+        b.from={x:a.x+(b.from.x-old.x)*a.w/old.w,y:a.y+(b.from.y-old.y)*a.h/old.h};
+        const target=this.targets[b.category],t=Math.min(1,b.elapsed/.8),e=t*t*(3-2*t);
+        b.x=b.from.x+(target.x+target.w/2-b.from.x)*e;b.y=b.from.y+(target.y+target.h/2-b.from.y)*e;return true;
+      }
+      if(placed>=cap){this.queue.push({word:b.word,category:b.category});return false;}
+      b.x=a.x+r+8+(placed%cols)*(r*2+8);b.y=a.y+r+8+Math.floor(placed/cols)*(r*2+8);placed++;return true;
+    });this.spawn();
+  }
+  start(){if(this.phase==='ready')this.phase='playing';}
+  spawn(){const r=this.s.size/2+4,a=this.arena;const cols=Math.floor(a.w/(r*2+8)),rows=Math.floor(a.h/(r*2+8));const cap=Math.min(6,cols*rows);
+    if(cap<1)throw Error('Spielfeld zu klein für diese Kugelgröße.');
+    for(let y=0;y<rows&&this.queue.length&&this.bubbles.length<cap;y++)for(let x=0;x<cols&&this.queue.length&&this.bubbles.length<cap;x++){let px=a.x+r+8+x*(r*2+8),py=a.y+r+8+y*(r*2+8);if(this.bubbles.some(b=>Math.hypot(px-b.x,py-b.y)<r*2+4))continue;let angle=this.random()*Math.PI*2;this.bubbles.push({...this.queue.pop(),x:px,y:py,dx:Math.cos(angle),dy:Math.sin(angle),state:'floating',r:r-4});}
+  }
+  assign(b,target){if(this.phase!=='playing'||b.state!=='floating')return null;
+    if(b.category!==target){this.lives--;if(!this.lives)this.finish('lost');return false;}
+    b.state='gliding';b.from={x:b.x,y:b.y};b.elapsed=0;return true;
+  }
+  codeSlots(){return this.s.categories.map((c,i)=>this.collected[i].length===c.words.length?c.codePart:null);}
+  solutionCode(){if(this.s.codeMode==='none')return '';return this.s.codeMode==='categories'?this.s.categories.map(c=>c.codePart).join(''):this.s.code;}
+  finish(phase){if(this.phase==='playing')this.phase=phase;}
+  step(dt,held=null,elapsed=dt){if(this.phase!=='playing')return;this.time+=elapsed;
+    if(this.s.timer){this.remaining=Math.max(0,this.remaining-elapsed);if(!this.remaining){this.finish('timeout');return;}}
+    const a=this.arena;
+    for(const b of this.bubbles){if(b.state==='gliding'){b.elapsed+=dt;let t=Math.min(1,b.elapsed/.8),e=t*t*(3-2*t),target=this.targets[b.category];b.x=b.from.x+(target.x+target.w/2-b.from.x)*e;b.y=b.from.y+(target.y+target.h/2-b.from.y)*e;if(t===1){b.state='done';this.collected[b.category].push(b.word.replaceAll('|',''));this.count++;}continue;}
+      if(b===held)continue;b.x+=b.dx*this.s.speed*dt;b.y+=b.dy*this.s.speed*dt;
+      if(b.x<a.x+b.r+4){b.x=a.x+b.r+4;b.dx=Math.abs(b.dx);}if(b.x>a.x+a.w-b.r-4){b.x=a.x+a.w-b.r-4;b.dx=-Math.abs(b.dx);}if(b.y<a.y+b.r+4){b.y=a.y+b.r+4;b.dy=Math.abs(b.dy);}if(b.y>a.y+a.h-b.r-4){b.y=a.y+a.h-b.r-4;b.dy=-Math.abs(b.dy);}
+    }
+    const free=this.bubbles.filter(b=>b.state==='floating');
+    for(let i=0;i<free.length;i++)for(let j=i+1;j<free.length;j++){const b=free[i],c=free[j];let dx=c.x-b.x,dy=c.y-b.y,d=Math.hypot(dx,dy),min=b.r+c.r+8;if(d<min){let nx=d?dx/d:1,ny=d?dy/d:0,over=(min-d)/2;if(b!==held){b.x-=nx*over;b.y-=ny*over;}if(c!==held){c.x+=nx*over;c.y+=ny*over;}let dot=(c.dx-b.dx)*nx+(c.dy-b.dy)*ny;if(dot<0){b.dx-=(-dot)*nx;b.dy-=(-dot)*ny;c.dx+=(-dot)*nx;c.dy+=(-dot)*ny;}for(const v of [b,c]){let norm=Math.hypot(v.dx,v.dy)||1;v.dx/=norm;v.dy/=norm;v.x=Math.max(a.x+v.r+4,Math.min(a.x+a.w-v.r-4,v.x));v.y=Math.max(a.y+v.r+4,Math.min(a.y+a.h-v.r-4,v.y));}}}
+    this.bubbles=this.bubbles.filter(b=>b.state!=='done');this.spawn();if(this.count===this.total)this.finish('won');
+  }
+}
+// Explicit | points are the only breaks inside words. Fit actual measured lines into a safe inner rectangle.
+function fitText(ctx,word,diameter,font,wanted){const limit=diameter*.70,parts=word.split('|');
+  for(let size=wanted;size>=10;size-=.5){ctx.font=`${size}px "${font}"`;let lines=[''];for(let i=0;i<parts.length;i++){const p=parts[i];if(ctx.measureText(lines.at(-1).replace(/-$/,'')+p).width<=limit)lines[lines.length-1]=lines.at(-1).replace(/-$/,'')+p;else {if(lines.at(-1))lines[lines.length-1]+='-';else lines.pop();lines.push(p);}}
+    if(lines.every(l=>ctx.measureText(l).width<=limit)&&lines.length*size*1.18<=limit)return {lines,size};
+  }
+  throw Error(`„${word}“ passt nicht lesbar. Bitte sinnvolle |Trennstellen ergänzen oder größere Kugeln wählen.`);
+}
+
+const $=id=>document.getElementById(id),canvas=$('game'),ctx=canvas.getContext('2d');
+const params=new URLSearchParams(location.search);let editing=!params.has('embed')&&(params.has('edit')||document.body.dataset.workshop==='true');let scenario,game,selected=null,drag=null,last=0,paused=false,texts=new Map();
+function notice(message){$('notice').textContent=message;$('editor-notice').textContent=message;}
+function readHash(){if(!location.hash)return null;try{return JSON.parse(decodeURIComponent(location.hash.slice(1)));}catch{throw Error('Die Szenario-Adresse ist beschädigt.');}}
+try{scenario=validate(readHash()||{"version": 1, "name": "Knotberg · Beispielrunde", "intro": "Beispielinhalte: Verbinde jede Wortkugel mit der passenden Märchenwelt.", "code": "WALD-42", "success": "Gut gemacht, du hast alle Wörter richtig zugeordnet!", "layout": "corners", "font": "Georgia", "size": 108, "fontSize": 22, "categoryFontSize": 22, "fill": "#f4e8c9", "stroke": "#bb9150", "strokeWidth": 3, "text": "#302a21", "glow": true, "background": "#142d2b", "transparent": false, "speed": 45, "lives": 3, "timer": 0, "collected": true, "categories": [{"name": "Rotkäppchen", "background": "#723e42", "border": "#e0a6a1", "text": "#fff1dd", "words": ["Rot|käpp|chen", "Groß|mut|ter", "Waldweg"], "codePart": "4"}, {"name": "Aschenputtel", "background": "#3e5572", "border": "#a1bfdf", "text": "#fff1dd", "words": ["Aschen|put|tel", "Gold|schuh", "Königs|ball"], "codePart": "2"}, {"name": "Hänsel und Gretel", "background": "#725836", "border": "#dfbd82", "text": "#fff1dd", "words": ["Leb|kuchen|haus", "Brot|krumen", "Hexen|ofen"], "codePart": "7"}, {"name": "Dornröschen", "background": "#574565", "border": "#cdb3de", "text": "#fff1dd", "words": ["Dorn|röschen", "Spindel", "Dor|nen|he|cke"], "codePart": "3"}], "codeMode": "categories", "startMode": "button", "startLabel": "Runde starten"});}catch(e){notice(e.message);throw e;}
+function setView(){document.body.classList.toggle('edit-view',editing);document.body.classList.toggle('play-view',!editing);$('editor').hidden=!editing;}
+setView();
+function setup(s){const next=validate(s),nextTexts=new Map();for(const c of next.categories)for(const word of c.words)nextTexts.set(word,fitText(ctx,word,next.size,next.font,next.fontSize));scenario=next;texts=nextTexts;document.documentElement.classList.toggle('transparent-game',!!scenario.transparent);document.documentElement.style.backgroundColor=scenario.transparent?'transparent':scenario.background;game=new Game(scenario);resizeBoard();selected=null;drag=null;paused=false;$('pause').textContent='Pause';$('title').textContent=scenario.name;$('intro').textContent=scenario.intro;$('result').hidden=true;last=0;notice('Bereit. Starte die Runde.');applyStartMode();sync();draw();}
+function updateStats(){const text=`${game.count}/${game.total} zugeordnet${scenario.timer?' · '+Math.ceil(game.remaining)+' s':''}`;if($('stats').textContent!==text)$('stats').textContent=text;}
+function updateControls(){
+  const ready=game.phase==='ready',ended=['won','lost','timeout'].includes(game.phase),overlay=ready&&!editing&&scenario.startMode==='overlay';
+  canvas.parentElement.classList.toggle('waiting',overlay);canvas.parentElement.classList.toggle('ended',ended);
+  $('start-screen').hidden=!overlay;$('start').hidden=!ready||(!editing&&scenario.startMode!=='button');$('start').disabled=!ready;$('start').textContent=scenario.startLabel;
+  $('play-start').setAttribute('aria-label',scenario.startLabel);$('start-caption').textContent=scenario.startLabel;
+  $('pause').hidden=game.phase!=='playing';$('pause').disabled=game.phase!=='playing';
+  $('keyboard-tools').hidden=ready||ended;
+  $('lives').setAttribute('aria-label',`${game.lives} von ${scenario.lives} Leben`);const hearts=$('life-icons');hearts.replaceChildren();
+  for(let i=0;i<scenario.lives;i++){const heart=document.createElement('span');heart.textContent='♥';heart.className=i<game.lives?'life-alive':'life-lost';heart.setAttribute('aria-hidden','true');hearts.append(heart);}
+}
+function applyStartMode(){if(!editing&&scenario.startMode==='auto'&&!document.hidden){game.start();notice('Die Runde läuft. Ordne die Wörter zu.');}}
+function sync(){ renderCategories();renderCode();updateStats();updateControls();const words=$('word-buttons');words.replaceChildren();for(const b of game.bubbles.filter(b=>b.state==='floating')){const button=document.createElement('button');button.textContent=b.word.replaceAll('|','');button.setAttribute('aria-pressed',String(b===selected));button.disabled=game.phase!=='playing'||paused;button.onclick=()=>{if(game.phase==='playing'&&!paused){selected=b;notice('Wähle jetzt die Kategorie.');sync();}};words.append(button);}const targets=$('target-buttons');targets.replaceChildren();scenario.categories.forEach((c,i)=>{const button=document.createElement('button');button.textContent=c.name;button.disabled=game.phase!=='playing'||paused;button.onclick=()=>{if(selected)assign(selected,i);};targets.append(button);});}
+function finishView(){if(!['won','lost','timeout'].includes(game.phase))return;$('result').hidden=false;$('result-title').textContent=game.phase==='won'?'Geschafft!':game.phase==='timeout'?'Die Zeit ist abgelaufen':'Keine Leben mehr';$('result-message').textContent=game.phase==='won'?scenario.success:'Versuche es noch einmal. Deine Einstellungen bleiben erhalten.';$('code').textContent=game.phase==='won'?game.solutionCode():'';$('code').hidden=!$('code').textContent;drag=null;selected=null;sync();$('again').focus();}
+function assign(b,i){if(paused)return;const answer=game.assign(b,i);selected=null;drag=null;if(answer!==null)notice(answer?'Richtig! Das Wort gleitet zu seinem Ziel.':'Das passt noch nicht. Ein Leben ist verloren.');sync();finishView();}
+function roundRect(t,fill,border){ctx.fillStyle=fill;ctx.strokeStyle=border;ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(t.x,t.y,t.w,t.h,15);ctx.fill();ctx.stroke();}
+function targetText(text,x,y,width,size){ctx.font=`${size}px "${scenario.font}"`;let words=text.split(' '),lines=[''];for(const word of words){let candidate=(lines.at(-1)+' '+word).trim();if(ctx.measureText(candidate).width>width&&lines.at(-1))lines.push(word);else lines[lines.length-1]=candidate;}while(lines.some(l=>ctx.measureText(l).width>width)&&size>8){size--;ctx.font=`${size}px "${scenario.font}"`;}lines.forEach((l,i)=>ctx.fillText(l,x,y+i*size*1.1));}
+function categoryTitle(text,width,wanted){
+  for(let size=wanted;size>=8;size-=.5){ctx.font=`${size}px "${scenario.font}"`;const lines=[''];for(const word of text.split(' ')){const candidate=(lines.at(-1)+' '+word).trim();if(ctx.measureText(candidate).width>width&&lines.at(-1))lines.push(word);else lines[lines.length-1]=candidate;}if(lines.length<=2&&lines.every(l=>ctx.measureText(l).width<=width))return {lines,size};}
+  return {lines:[text],size:8};
+}
+function renderCategories(){
+  if(!game)return;const layer=$('category-cards');layer.replaceChildren();const scale=canvas.clientWidth/game.w;
+  game.targets.forEach((t,i)=>{const c=scenario.categories[i],card=document.createElement('section');card.className='target-card';card.setAttribute('aria-label',c.name);
+    Object.assign(card.style,{left:`${canvas.offsetLeft+t.x*scale}px`,top:`${canvas.offsetTop+t.y*scale}px`,width:`${t.w*scale}px`,height:`${t.h*scale}px`,background:c.background,borderColor:c.border,color:c.text,fontFamily:scenario.font,padding:`${6*scale}px`,borderWidth:`${2*scale}px`,borderRadius:`${15*scale}px`,gap:`${4*scale}px`});
+    const title=document.createElement('h2'),fitted=categoryTitle(c.name,t.w-20,scenario.categoryFontSize);title.textContent=fitted.lines.join('\n');title.style.fontSize=`${fitted.size*scale}px`;card.append(title);
+    if(scenario.collected){const list=document.createElement('ul');list.className='collected-words';list.style.fontSize=`${16*scale}px`;for(const word of game.collected[i]){const item=document.createElement('li');item.textContent=word;list.append(item);}card.append(list);}
+    else{const count=document.createElement('p');count.className='collected-count';count.style.fontSize=`${16*scale}px`;count.textContent=`${game.collected[i].length} / ${c.words.length}`;card.append(count);}
+    card.onpointerdown=e=>{if(selected)canvas.onpointerdown(e);};layer.append(card);
+  });
+}
+function renderCode(){const box=$('code-box');box.hidden=scenario.codeMode!=='categories';const slots=$('code-slots');slots.replaceChildren();if(box.hidden)return;game.codeSlots().forEach((part,i)=>{const slot=document.createElement('span');slot.className='code-slot';slot.textContent=part??'–';slot.setAttribute('aria-label',`${scenario.categories[i].name}: ${part??'noch nicht vollständig'}`);if(part!==null)slot.classList.add('revealed');slots.append(slot);});}
+function draw(){ctx.clearRect(0,0,game.w,game.h);if(!scenario.transparent){ctx.fillStyle=scenario.background;ctx.fillRect(0,0,game.w,game.h);}ctx.textAlign='center';ctx.textBaseline='middle';const a=game.arena;ctx.strokeStyle='#ffffff19';ctx.setLineDash([4,8]);ctx.strokeRect(a.x,a.y,a.w,a.h);ctx.setLineDash([]);
+
+ if(drag){ctx.strokeStyle='#ffe0a0';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(drag.b.x,drag.b.y);ctx.lineTo(drag.x,drag.y);ctx.stroke();}
+ for(const b of game.bubbles){ctx.save();ctx.fillStyle=scenario.fill;ctx.strokeStyle=b===selected?'#ffffff':scenario.stroke;ctx.lineWidth=scenario.strokeWidth;if(scenario.glow){ctx.shadowColor=scenario.stroke;ctx.shadowBlur=14;}ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.shadowBlur=0;const fitted=texts.get(b.word);ctx.font=`${fitted.size}px "${scenario.font}"`;ctx.fillStyle=scenario.text;fitted.lines.forEach((line,i)=>ctx.fillText(line,b.x,b.y+(i-(fitted.lines.length-1)/2)*fitted.size*1.18));ctx.restore();}
+}
+function frame(t){if(last&&game.phase==='playing'&&!paused){const before=game.count,beforeQueue=game.queue.length,phase=game.phase;game.step(Math.min((t-last)/1000,.04),selected,(t-last)/1000);if(game.count!==before||game.queue.length!==beforeQueue){sync();}if(phase!==game.phase)finishView();updateStats();}last=t;draw();requestAnimationFrame(frame);}
+function point(e){const rect=canvas.getBoundingClientRect();return {x:(e.clientX-rect.left)*game.w/rect.width,y:(e.clientY-rect.top)*game.h/rect.height};}
+function targetAt(p){return game.targets.findIndex(t=>p.x>=t.x&&p.x<=t.x+t.w&&p.y>=t.y&&p.y<=t.y+t.h);}
+canvas.onpointerdown=e=>{if(game.phase!=='playing'||paused||drag)return;const p=point(e),target=targetAt(p);if(selected&&target>=0){assign(selected,target);return;}const b=[...game.bubbles].reverse().find(b=>b.state==='floating'&&Math.hypot(b.x-p.x,b.y-p.y)<=b.r);if(b){selected=b;drag={b,...p,id:e.pointerId};canvas.setPointerCapture(e.pointerId);sync();}};
+canvas.onpointermove=e=>{if(drag&&drag.id===e.pointerId)Object.assign(drag,point(e));};
+canvas.onpointerup=e=>{if(!drag||drag.id!==e.pointerId)return;const i=targetAt(point(e)),b=drag.b;drag=null;if(i>=0)assign(b,i);else notice('Wort ausgewählt. Tippe ein Ziel an oder zeichne die Verbindung erneut.');};
+canvas.onpointercancel=()=>{drag=null;selected=null;sync();};
+function beginRound(){game.start();notice('Ordne die Wörter zu.');sync();$('pause').focus();}
+$('start').onclick=beginRound;$('play-start').onclick=beginRound;
+function restart(){setup(scenario);game.start();sync();notice('Neue Runde gestartet.');}
+$('again').onclick=restart;$('pause').onclick=()=>{paused=!paused;drag=null;$('pause').textContent=paused?'Weiter':'Pause';notice(paused?'Runde pausiert.':'Runde läuft weiter.');sync();};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&game.phase==='playing'){paused=true;drag=null;$('pause').textContent='Weiter';notice('Runde pausiert. Mit Weiter fortsetzen.');sync();}else if(!document.hidden&&game.phase==='ready'&&!editing&&scenario.startMode==='auto'){applyStartMode();sync();}});
+const fieldDefs=[['name','Szenarioname','text'],['startMode','Startart','select',['button','Startbutton über dem Spielfeld','auto','Automatisch beim Öffnen','overlay','Großer Play-Button auf verschwommenem Spielfeld']],['startLabel','Beschriftung des Startbuttons','text'],['intro','Spielauftrag','text'],['code','Gemeinsamer Lösungscode (nur im Modus „erst am Ende“)','text'],['success','Erfolgsmeldung','text'],['codeMode','Code anzeigen','select',['categories','Ein Zeichen je gelöster Kategorie','final','Gemeinsamer Code erst am Ende','none','Nur Erfolgsmeldung, ohne Code']],['layout','Ziele anordnen','select',['corners','Ecken','bottom','Alle unten nebeneinander','sides','Links und rechts']],['font','Gemeinsame Schriftart','select',['Georgia','Georgia','Arial','Arial','Verdana','Verdana','Trebuchet MS','Trebuchet MS']],['size','Kugelgröße (64–150)','number',64,150],['fontSize','Kugelschrift (12–36)','number',12,36],['categoryFontSize','Kategorienschrift (12–30)','number',12,30],['fill','Kugelfüllung','color'],['stroke','Kugelrahmen','color'],['strokeWidth','Rahmenstärke (0–8)','number',0,8],['text','Kugeltext','color'],['glow','Leuchteffekt','checkbox'],['background','Spielfeldfarbe','color'],['transparent','Hintergrund transparent','checkbox'],['speed','Geschwindigkeit (0–120)','number',0,120],['lives','Start-Leben (1–10)','number',1,10],['timer','Timer in Sekunden (0 = aus)','number',0,3600],['collected','Gesammelte Wörter anzeigen','checkbox']];
+function field(parent,key,label,type,value,options,min,max){const l=document.createElement('label');l.textContent=label;const input=document.createElement(type==='select'?'select':type==='textarea'?'textarea':'input');input.name=key;if(type==='select')for(let i=0;i<options.length;i+=2){const o=new Option(options[i+1],options[i]);input.add(o);}else if(type!=='textarea')input.type=type;if(type==='checkbox')input.checked=value;else input.value=value;if(type==='number'){input.min=min;input.max=max;input.step=1;}if(type==='textarea')input.rows=6;l.append(input);parent.append(l);}
+function populate(){ $('category-count').value=String(scenario.categories.length);$('general').replaceChildren();fieldDefs.forEach(([k,l,t,...args])=>field($('general'),k,l,t,scenario[k],t==='select'?args[0]:null,args[0],args[1]));$('categories').replaceChildren();scenario.categories.forEach((c,i)=>{const fs=document.createElement('fieldset'),legend=document.createElement('legend');legend.textContent=`Kategorie ${i+1}`;fs.append(legend);for(const [k,l,t] of [['name','Name','text'],['codePart','Codezeichen bei vollständiger Kategorie','text'],['background','Hintergrund','color'],['border','Rahmen','color'],['text','Textfarbe','color'],['words','Wörter (eines je Zeile)','textarea']])field(fs,`c${i}-${k}`,l,t,k==='words'?c.words.join('\n'):c[k]);$('categories').append(fs);});$('settings').elements.codeMode.onchange=updateCodeFields;updateCodeFields();}
+function updateCodeFields(){const elements=$('settings').elements,categories=elements.codeMode.value==='categories';elements.code.disabled=elements.codeMode.value!=='final';scenario.categories.forEach((c,i)=>{elements[`c${i}-codePart`].disabled=!categories;});}
+function readSettings(){const next=structuredClone(scenario),elements=$('settings').elements;for(const [k,,t] of fieldDefs)next[k]=t==='checkbox'?elements[k].checked:t==='number'?Number(elements[k].value):elements[k].value;next.categories.forEach((c,i)=>{for(const k of ['name','codePart','background','border','text','words'])c[k]=k==='words'?elements[`c${i}-${k}`].value.split('\n').map(s=>s.trim()).filter(Boolean):elements[`c${i}-${k}`].value;});return validate(next);}
+function apply(){setup(readSettings());}
+function safe(action){try{action();}catch(e){notice(e.message);}}
+$('settings').onsubmit=e=>{e.preventDefault();safe(apply);};
+const storageKey='bubble-match-scenarios-v1';function saved(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}function refreshSaved(){safe(()=>{const list=$('saved');list.replaceChildren();for(const name of Object.keys(saved()))list.add(new Option(name,name));});}
+$('save').onclick=()=>safe(()=>{apply();const all=saved();all[scenario.name]=structuredClone(scenario);localStorage.setItem(storageKey,JSON.stringify(all));refreshSaved();notice('Szenario in diesem Browser gespeichert.');});
+$('load').onclick=()=>safe(()=>{const s=saved()[$('saved').value];if(!s)throw Error('Bitte zuerst ein Szenario speichern oder JSON laden.');setup(s);populate();});
+$('duplicate').onclick=()=>safe(()=>{apply();scenario.name+=' · Kopie';populate();notice('Kopie angelegt. Vergib einen neuen Namen und speichere sie.');});
+$('export').onclick=()=>safe(()=>{apply();const url=URL.createObjectURL(new Blob([JSON.stringify(scenario,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='bubble-match-szenario.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notice('JSON-Datei heruntergeladen.');});
+$('import').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>100000)throw Error('Datei zu groß.');setup(JSON.parse(await file.text()));populate();notice('Szenario geladen.');}catch(error){notice(error.message);}finally{e.target.value='';}};
+$('link').onclick=()=>safe(()=>{apply();const url=new URL(location.href);url.pathname=url.pathname.replace(/werkstatt\.html$/, 'index.html');url.search='?embed=1';url.hash=encodeURIComponent(JSON.stringify(scenario));$('embed').value=url.href+'\n\n'+`<iframe src="${url.href}" width="100%" height="600" title="Bubble Match" style="border:0" allow="fullscreen"></iframe>`;notice('Feste Momentaufnahme erzeugt. Lokale Adressen sind noch nicht in Genially erreichbar.');});
+function resizeBoard(){
+  if(!game)return;
+  const board=canvas.parentElement, width=Math.max(1,board.clientWidth-2);
+  const availableHeight=editing?Math.min(650,Math.max(360,window.innerHeight*.62)):Math.max(1,board.clientHeight-2);
+  const logicalWidth=width<650?600:1000;
+  const minimumHeight=scenario.layout==='corners'?(scenario.categories.length>2?316:174)+scenario.size+24:scenario.layout==='bottom'?174+scenario.size+24:320;
+  const logicalHeight=Math.max(minimumHeight,Math.round(logicalWidth*availableHeight/width));
+  if(game.w!==logicalWidth||game.h!==logicalHeight){game.resize(logicalWidth,logicalHeight);selected=null;drag=null;sync();}
+  const scale=Math.min(width/logicalWidth,availableHeight/logicalHeight);
+  canvas.style.width=`${logicalWidth*scale}px`;canvas.style.height=`${logicalHeight*scale}px`;
+  canvas.width=game.w*2;canvas.height=game.h*2;ctx.setTransform(2,0,0,2,0,0);renderCategories();draw();
+}
+function closeEditor(){safe(()=>{
+  apply();editing=false;setView();resizeBoard();applyStartMode();sync();
+  const url=new URL(location.href);url.search='?embed=1';url.hash=encodeURIComponent(JSON.stringify(scenario));
+  try{history.replaceState(null,'',url.href);}catch{/* Some browsers restrict file history changes; the current view still works. */}
+  window.scrollTo(0,0);if(game.phase==='playing'){$('pause').focus();notice('Einstellungen übernommen. Die Runde läuft.');}else{(scenario.startMode==='overlay'?$('play-start'):$('start')).focus();notice('Einstellungen übernommen. Bereit zum Spielen.');}
+});}
+$('category-count').onchange=()=>safe(()=>{const next=readSettings(),count=Number($('category-count').value);while(next.categories.length<count){const i=next.categories.length;next.categories.push({name:`Kategorie ${i+1}`,codePart:String(i+1),background:'#3e5572',border:'#a1bfdf',text:'#fff1dd',words:[`Beispiel ${i+1}`]});}next.categories=next.categories.slice(0,count);setup(next);populate();notice('Kategorienzahl angepasst. Die übrigen Kategorien bleiben erhalten.');});
+$('close-editor').onclick=closeEditor;$('close-editor-bottom').onclick=closeEditor;
+window.addEventListener('resize',resizeBoard);
+new ResizeObserver(()=>resizeBoard()).observe(canvas.parentElement);
+
+setup(scenario);if(editing){populate();refreshSaved();}requestAnimationFrame(frame);
+
+})();
+</script></body></html>

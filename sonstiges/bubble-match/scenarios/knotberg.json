@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "name": "Knotberg · Beispielrunde",
+  "intro": "Beispielinhalte: Verbinde jede Wortkugel mit der passenden Märchenwelt.",
+  "code": "WALD-42",
+  "success": "Gut gemacht, du hast alle Wörter richtig zugeordnet!",
+  "layout": "corners",
+  "font": "Georgia",
+  "size": 108,
+  "fontSize": 22,
+  "categoryFontSize": 22,
+  "fill": "#f4e8c9",
+  "stroke": "#bb9150",
+  "strokeWidth": 3,
+  "text": "#302a21",
+  "glow": true,
+  "background": "#142d2b",
+  "transparent": false,
+  "speed": 45,
+  "lives": 3,
+  "timer": 0,
+  "collected": true,
+  "categories": [
+    {
+      "name": "Rotkäppchen",
+      "background": "#723e42",
+      "border": "#e0a6a1",
+      "text": "#fff1dd",
+      "words": [
+        "Rot|käpp|chen",
+        "Groß|mut|ter",
+        "Waldweg"
+      ],
+      "codePart": "4"
+    },
+    {
+      "name": "Aschenputtel",
+      "background": "#3e5572",
+      "border": "#a1bfdf",
+      "text": "#fff1dd",
+      "words": [
+        "Aschen|put|tel",
+        "Gold|schuh",
+        "Königs|ball"
+      ],
+      "codePart": "2"
+    },
+    {
+      "name": "Hänsel und Gretel",
+      "background": "#725836",
+      "border": "#dfbd82",
+      "text": "#fff1dd",
+      "words": [
+        "Leb|kuchen|haus",
+        "Brot|krumen",
+        "Hexen|ofen"
+      ],
+      "codePart": "7"
+    },
+    {
+      "name": "Dornröschen",
+      "background": "#574565",
+      "border": "#cdb3de",
+      "text": "#fff1dd",
+      "words": [
+        "Dorn|röschen",
+        "Spindel",
+        "Dor|nen|he|cke"
+      ],
+      "codePart": "3"
+    }
+  ],
+  "codeMode": "categories",
+  "startMode": "button",
+  "startLabel": "Runde starten"
+}
